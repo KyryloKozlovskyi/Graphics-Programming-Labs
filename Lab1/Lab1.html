@@ -27,6 +27,7 @@
 
     // Set the canvas up for drawing in 2D.
     const ctx = canvas.getContext("2d");
+    ctx.lineWidth = 5;
 
     // Set the fill colour to bright red.
     ctx.fillStyle = "rgb(255, 0, 0)";
@@ -39,17 +40,26 @@
     ctx.fillStyle = "rgb(0, 255, 0)";
 
     // 7. Change the dimensions of the square in canvas.html to change it to a rectangle
-    ctx.fillRect(20, 75, 125, 100);
+    ctx.beginPath();
+    ctx.strokeStyle = "rgb(255, 165, 0)";
+    ctx.rect(20, 75, 125, 100);
+    ctx.stroke();
+    ctx.fill();
 
     // 8. Modify the HTML file to draw a rectangle of a different colour
     ctx.fillStyle = "rgba(0, 0, 255, 0.4)"; // 9. RGBA
-    ctx.fillRect(75, 125, 125, 100);
+    ctx.strokeStyle = "rgb(165, 165, 75)";
+    ctx.beginPath();
+    ctx.rect(75, 125, 125, 100);
+    ctx.fill();
+    ctx.stroke();
 
     // Add two circles of 2 different colours 
     // Circle 1
     ctx.beginPath();
     ctx.arc(50, 300, 40, 0, 2 * Math.PI);
     ctx.fillStyle = "rgb(255, 0, 0)";
+    ctx.strokeStyle = "rgb(165, 255, 0)";
     ctx.fill();
     ctx.stroke();
 
@@ -57,6 +67,7 @@
     ctx.beginPath();
     ctx.arc(50, 400, 40, 0, 2 * Math.PI);
     ctx.fillStyle = "rgb(0, 255, 0)";
+    ctx.strokeStyle = "rgb(50, 30, 155)";
     ctx.fill();
     ctx.stroke();
 
