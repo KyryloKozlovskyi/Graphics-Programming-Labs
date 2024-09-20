@@ -71,6 +71,22 @@
     ctx.fill();
     ctx.stroke();
 
+    // 12. Draw a semi-circle and three-quarters of a circle
+    ctx.beginPath();
+    ctx.arc(50, 500, 40, 0, Math.PI);
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "rgb(50, 30, 77)";
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(200, 500, 40, 0, 1.5 * Math.PI);
+    ctx.lineTo(200, 500)
+    ctx.lineTo(243, 500)
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "rgb(50, 30, 77)";
+    ctx.fill();
+    ctx.stroke();
 
   </script>
 
