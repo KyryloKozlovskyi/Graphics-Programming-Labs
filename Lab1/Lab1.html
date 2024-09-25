@@ -1,95 +1,85 @@
 <!DOCTYPE html>
-
 <html>
-
-<head>
-  <meta charset="UTF-8">
-  <title>Canvas</title>
-
-  <style type="text/css">
-    /* 3. Draw a black border around the canvas, using CSS */
-    canvas {
-      border: 1px solid black;
-    }
-  </style>
-
-</head>
-
-<body>
-
-  <!-- 4. Change the size of the canvas -->
-  <canvas id="canvasOne" width="600" , height="600"></canvas>
-
-  <script type="text/javascript">
-
-    // Gets a handle to the element with id canvasOne.
-    const canvas = document.getElementById("canvasOne");
-
-    // Set the canvas up for drawing in 2D.
-    const ctx = canvas.getContext("2d");
-    ctx.lineWidth = 5;
-
-    // Set the fill colour to bright red.
-    ctx.fillStyle = "rgb(255, 0, 0)";
-
-    // 5. Add you name as text to the canvas
-    ctx.font = "30px Comic Sans MS";
-    ctx.fillText("Kyrylo Kozlovskyi", 20, 50);
-
-    // 6. Change canvas.html to make the rectangle another colour
-    ctx.fillStyle = "rgb(0, 255, 0)";
-
-    // 7. Change the dimensions of the square in canvas.html to change it to a rectangle
-    ctx.beginPath();
-    ctx.strokeStyle = "rgb(255, 165, 0)";
-    ctx.rect(20, 75, 125, 100);
-    ctx.stroke();
-    ctx.fill();
-
-    // 8. Modify the HTML file to draw a rectangle of a different colour
-    ctx.fillStyle = "rgba(0, 0, 255, 0.4)"; // 9. RGBA
-    ctx.strokeStyle = "rgb(165, 165, 75)";
-    ctx.beginPath();
-    ctx.rect(75, 125, 125, 100);
-    ctx.fill();
-    ctx.stroke();
-
-    // Add two circles of 2 different colours 
-    // Circle 1
-    ctx.beginPath();
-    ctx.arc(50, 300, 40, 0, 2 * Math.PI);
-    ctx.fillStyle = "rgb(255, 0, 0)";
-    ctx.strokeStyle = "rgb(165, 255, 0)";
-    ctx.fill();
-    ctx.stroke();
-
-    // Circle 2
-    ctx.beginPath();
-    ctx.arc(50, 400, 40, 0, 2 * Math.PI);
-    ctx.fillStyle = "rgb(0, 255, 0)";
-    ctx.strokeStyle = "rgb(50, 30, 155)";
-    ctx.fill();
-    ctx.stroke();
-
-    // 12. Draw a semi-circle and three-quarters of a circle
-    ctx.beginPath();
-    ctx.arc(50, 500, 40, 0, Math.PI);
-    ctx.fillStyle = "red";
-    ctx.strokeStyle = "rgb(50, 30, 77)";
-    ctx.fill();
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(200, 500, 40, 0, 1.5 * Math.PI);
-    ctx.lineTo(200, 500)
-    ctx.lineTo(243, 500)
-    ctx.fillStyle = "red";
-    ctx.strokeStyle = "rgb(50, 30, 77)";
-    ctx.fill();
-    ctx.stroke();
-
-  </script>
-
-</body>
-
+   <head>
+      <meta charset="UTF-8">
+      <title>Canvas</title>
+      <style type="text/css">
+         /* 3. Draw a black border around the canvas, using CSS */
+         canvas {
+         border: 1px solid black;
+         }
+      </style>
+   </head>
+   <body>
+      <!-- 4. Change the size of the canvas -->
+      <canvas id="canvasOne" width="600" , height="600"></canvas>
+      <script type="text/javascript">
+         // Gets a handle to the element with id canvasOne.
+         const canvas = document.getElementById("canvasOne");
+         
+         // Set the canvas up for drawing in 2D.
+         const ctx = canvas.getContext("2d");
+         ctx.lineWidth = 5;
+         
+         // Set the fill colour to bright red.
+         ctx.fillStyle = "rgb(255, 0, 0)";
+         
+         // 5. Add you name as text to the canvas
+         ctx.font = "30px Comic Sans MS";
+         ctx.fillText("Kyrylo Kozlovskyi", 20, 50);
+         
+         // 6. Change canvas.html to make the rectangle another colour
+         ctx.fillStyle = "rgb(0, 255, 0)";
+         
+         // 7. Change the dimensions of the square in canvas.html to change it to a rectangle
+         ctx.beginPath();
+         ctx.strokeStyle = "rgb(255, 165, 0)";
+         ctx.rect(20, 75, 125, 100);
+         ctx.stroke();
+         ctx.fill();
+         
+         // 8. Modify the HTML file to draw a rectangle of a different colour
+         ctx.fillStyle = "rgba(0, 0, 255, 0.4)"; // 9. RGBA
+         ctx.strokeStyle = "rgb(165, 165, 75)";
+         ctx.beginPath();
+         ctx.rect(75, 125, 125, 100);
+         ctx.fill();
+         ctx.stroke();
+         
+         // Add two circles of 2 different colours 
+         // Circle 1
+         ctx.beginPath();
+         ctx.arc(50, 300, 40, 0, 2 * Math.PI);
+         ctx.fillStyle = "rgb(255, 0, 0)";
+         ctx.strokeStyle = "rgb(165, 255, 0)";
+         ctx.fill();
+         ctx.stroke();
+         
+         // Circle 2
+         ctx.beginPath();
+         ctx.arc(50, 400, 40, 0, 2 * Math.PI);
+         ctx.fillStyle = "rgb(0, 255, 0)";
+         ctx.strokeStyle = "rgb(50, 30, 155)";
+         ctx.fill();
+         ctx.stroke();
+         
+         // 12. Draw a semi-circle and three-quarters of a circle
+         ctx.beginPath();
+         ctx.arc(50, 500, 40, 0, Math.PI);
+         ctx.fillStyle = "red";
+         ctx.strokeStyle = "rgb(50, 30, 77)";
+         ctx.fill();
+         ctx.stroke();
+         
+         ctx.beginPath();
+         ctx.arc(200, 500, 40, 0, 1.5 * Math.PI);
+         ctx.lineTo(200, 500)
+         ctx.lineTo(242, 500)
+         ctx.fillStyle = "red";
+         ctx.strokeStyle = "rgb(50, 30, 77)";
+         ctx.fill();
+         ctx.stroke();
+         
+      </script>
+   </body>
 </html>
