@@ -18,9 +18,28 @@
 <body>
     <h1>Kyrylo Kozlovskyi</h1>
     <!-- Resized canvas -->
-    <canvas id="canvasOne" width="600" , height="600"></canvas>
+    <canvas id="canvas-for-ball" width="500" , height="500"></canvas>
     <script type="text/javascript">
+        // canvas id canvas-for-ball
+        var canvas = document.getElementById("canvas-for-ball");
+        // 2d context
+        var ctx = canvas.getContext("2d");
+        // The vertical location of the ball.
+        var y = 10;
+        // Animation func
+        function repeatme() {
+            // Draw the ball (stroked, not filled).
+            ctx.beginPath();
+            ctx.arc(50, y, 3, 0, 2 * Math.PI);
+            ctx.stroke();
 
+            // Update the y location.
+            y += 1;
+
+            window.requestAnimationFrame(repeatme);
+        }
+        // Start animation
+        repeatme();
     </script>
 </body>
 
