@@ -17,30 +17,38 @@
 
 <body>
     <h1>Kyrylo Kozlovskyi</h1>
-    <!-- Resized canvas -->
-    <canvas id="canvas-for-ball" width="500" , height="500"></canvas>
+    <!-- Canvas -->
+    <canvas id="canvas-for-ball"></canvas>
+    <!-- Script -->
     <script type="text/javascript">
-        // canvas id canvas-for-ball
+        var canvasHeight = 500; // Stores canvas Heigth
+        var canvasWidth = 500; // Stores canvas Width
+        // Gets a handle to the element with id canvasOne
         var canvas = document.getElementById("canvas-for-ball");
         // 2d context
         var ctx = canvas.getContext("2d");
-        // The vertical location of the ball
-        var y = 10;
+        // Resizes canvas
+        ctx.canvas.height = canvasHeight;
+        ctx.canvas.width = canvasWidth;
+        var y = 25; // The vertical location of the ball
+        var ySpeed = 5; // Ball speed
+        var radius = 25 // Ball radius
         // Animation func
         function repeatme() {
             // Clear canvas
-            ctx.clearRect(0, 0, 500, 500)
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             // Draw the ball
             ctx.beginPath();
-            ctx.arc(50, y, 25, 0, 2 * Math.PI);
+            ctx.arc(50, y, radius, 0, 2 * Math.PI);
             ctx.stroke();
-            if (y == 475) {
-                return;
-            }
-            else {
-                y += 5;
-            }
+            y += ySpeed;
             // Update the y location
+            if (y >= canvasHeight - radius) {
+                ySpeed = -5
+            }
+            else if (y <= radius) {
+                ySpeed = 5;
+            }
             // Draw the frame
             window.requestAnimationFrame(repeatme);
         }
