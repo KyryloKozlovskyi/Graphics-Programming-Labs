@@ -31,6 +31,8 @@
         ctx.canvas.height = canvasHeight;
         ctx.canvas.width = canvasWidth;
         var y = 25; // The vertical location of the ball
+        var x = 50; // The horizontal location of the ball
+        var xSpeed = 5;
         var ySpeed = 5; // Ball speed
         var radius = 25 // Ball radius
         // Animation func
@@ -39,15 +41,24 @@
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             // Draw the ball
             ctx.beginPath();
-            ctx.arc(50, y, radius, 0, 2 * Math.PI);
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
             ctx.stroke();
             y += ySpeed;
+            x += xSpeed
             // Update the y location
+            // Down -> Up
             if (y >= canvasHeight - radius) {
-                ySpeed = -5
+                ySpeed = ySpeed * -1;
             }
             else if (y <= radius) {
-                ySpeed = 5;
+                ySpeed = ySpeed * -1;
+            }
+            // Left -> Right
+            if (x >= canvasWidth - radius) {
+                xSpeed = xSpeed * -1;
+            }
+            else if (x <= radius) {
+                xSpeed = xSpeed * -1;
             }
             // Draw the frame
             window.requestAnimationFrame(repeatme);
