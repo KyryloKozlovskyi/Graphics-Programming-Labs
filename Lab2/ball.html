@@ -9,7 +9,7 @@
     <style type="text/css">
         /* Black border */
         canvas {
-            border: 1px solid black;
+            border: 5px solid black;
         }
     </style>
 
@@ -32,7 +32,7 @@
         ctx.canvas.width = canvasWidth;
         var y = 25; // The vertical location of the ball
         var x = 50; // The horizontal location of the ball
-        var xSpeed = 5;
+        var xSpeed = (Math.random() * 10) + 1;
         var ySpeed = 5; // Ball speed
         var radius = 25 // Ball radius
         // Animation func
@@ -49,9 +49,11 @@
             // Down -> Up
             if (y >= canvasHeight - radius) {
                 ySpeed = ySpeed * -1;
+                xSpeed = (Math.random() * 10) + 1;
             }
             else if (y <= radius) {
                 ySpeed = ySpeed * -1;
+                xSpeed = (Math.random() * 10) + 1;
             }
             // Left -> Right
             if (x >= canvasWidth - radius) {
