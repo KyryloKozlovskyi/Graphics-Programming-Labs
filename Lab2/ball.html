@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <h1>KK</h1>
+    <h1>Kyrylo Kozlovskyi</h1>
     <!-- Canvas 500x500 -->
     <canvas id="canvas-for-ball" height="500" width="500"></canvas>
     <!-- Script -->
@@ -38,12 +38,30 @@
                 this.radius = radius;
             }
 
-            // Draw ball
+            // Draw peace sign
             draw() {
                 ctx.clearRect(0, 0, ctx.canvas.height, ctx.canvas.width); // Clear canvas
-                ctx.beginPath(); // Start drawing the ball
-                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI); // Draw the ball
-                ctx.stroke(); // Stroke the ball
+                ctx.beginPath(); // Start drawing the peace sign
+
+                // Outer circle
+                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                // Vertical line
+                ctx.moveTo(this.x, this.y - this.radius); // Start from the top of the circle
+                ctx.lineTo(this.x, this.y + this.radius); // Draw a line to the bottom of the circle
+                ctx.stroke(); // Draw the line
+
+                // Left diagonal line
+                ctx.moveTo(this.x, this.y); // Start from the center of the circle
+                ctx.lineTo(this.x - this.radius * Math.cos(7 * Math.PI / 4), this.y + this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom left of the circle
+                ctx.stroke(); // Draw the line
+
+                // Right diagonal line
+                ctx.moveTo(this.x, this.y); // Start from the center of the circle
+                ctx.lineTo(this.x + this.radius * Math.cos(7 * Math.PI / 4), this.y + this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom right of the circle
+                ctx.stroke(); // Draw the line
+
             }
 
             // Move ball
@@ -67,12 +85,9 @@
                 }
             }
 
-            resize() {
-
-            }
         }
 
-        const ball = new Ball(50, 50, 6, 5, 15); // Create ball
+        const ball = new Ball(50, 50, 2, 3, 50); // Create ball
         // Animation func
         function repeatme() {
             ball.draw(); // Draw the ball
