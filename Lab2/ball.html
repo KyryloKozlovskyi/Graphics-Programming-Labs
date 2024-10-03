@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
     <meta charset="UTF-8">
     <title>Animated Ball</title>
-
     <style type="text/css">
         canvas {
             border: 5px solid black;
@@ -14,7 +12,6 @@
             /* White background */
         }
     </style>
-
 </head>
 
 <body>
@@ -36,32 +33,38 @@
                 this.xspeed = xspeed;
                 this.yspeed = yspeed;
                 this.radius = radius;
+                this.angle = 0;
+                this.rotation = 0.08;
             }
 
             // Draw peace sign
             draw() {
                 ctx.clearRect(0, 0, ctx.canvas.height, ctx.canvas.width); // Clear canvas
-                ctx.beginPath(); // Start drawing the peace sign
+                ctx.save(); // Save the current state
+                ctx.translate(this.x, this.y); // Move to the ball's position
+                ctx.rotate(this.angle); // Rotate the peace sign
 
+                ctx.beginPath(); // Start drawing the peace sign
                 // Outer circle
-                ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+                ctx.arc(0, 0, this.radius, 0, 2 * Math.PI);
                 ctx.stroke();
 
                 // Vertical line
-                ctx.moveTo(this.x, this.y - this.radius); // Start from the top of the circle
-                ctx.lineTo(this.x, this.y + this.radius); // Draw a line to the bottom of the circle
+                ctx.moveTo(0, -this.radius); // Start from the top of the circle
+                ctx.lineTo(0, this.radius); // Draw a line to the bottom of the circle
                 ctx.stroke(); // Draw the line
 
                 // Left diagonal line
-                ctx.moveTo(this.x, this.y); // Start from the center of the circle
-                ctx.lineTo(this.x - this.radius * Math.cos(7 * Math.PI / 4), this.y + this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom left of the circle
+                ctx.moveTo(0, 0); // Start from the center of the circle
+                ctx.lineTo(-this.radius * Math.cos(7 * Math.PI / 4), this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom left of the circle
                 ctx.stroke(); // Draw the line
 
                 // Right diagonal line
-                ctx.moveTo(this.x, this.y); // Start from the center of the circle
-                ctx.lineTo(this.x + this.radius * Math.cos(7 * Math.PI / 4), this.y + this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom right of the circle
+                ctx.moveTo(0, 0); // Start from the center of the circle
+                ctx.lineTo(this.radius * Math.cos(7 * Math.PI / 4), this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom right of the circle
                 ctx.stroke(); // Draw the line
 
+                ctx.restore(); // Restore the state
             }
 
             // Move ball
@@ -70,30 +73,38 @@
                 this.y += this.yspeed;
                 this.x += this.xspeed;
                 // Up -> Down bounce
-                if (this.y >= ctx.canvas.height - this.radius) {
-                    this.yspeed = this.yspeed * -1;
+                if (this.y >= ctx.canvas.height - this.radius) { // If the ball hits the bottom
+                    this.yspeed = this.yspeed * -1; // Reverse the yspeed
+                    this.rotation = this.rotation * -1; // Reverse the rotation
                 }
-                else if (this.y <= this.radius) {
-                    this.yspeed = this.yspeed * -1;
+                else if (this.y <= this.radius) { // If the ball hits the top
+                    this.yspeed = this.yspeed * -1; // Reverse the yspeed
+                    this.rotation = this.rotation * -1; // Reverse the rotation
                 }
                 // Left -> Right bounce
-                if (this.x >= ctx.canvas.width - this.radius) {
-                    this.xspeed = this.xspeed * -1;
+                if (this.x >= ctx.canvas.width - this.radius) { // If the ball hits the right
+                    this.xspeed = this.xspeed * -1; // Reverse the xspeed
+                    this.rotation = this.rotation * -1; // Reverse the rotation
                 }
-                else if (this.x <= this.radius) {
-                    this.xspeed = this.xspeed * -1;
+                else if (this.x <= this.radius) { // If the ball hits the left
+                    this.xspeed = this.xspeed * -1; // Reverse the xspeed
+                    this.rotation = this.rotation * -1; // Reverse the rotation
                 }
             }
 
+            // Rotate ball
+            rotateBall() {
+                this.angle += this.rotation; // Increment the angle
+            }
         }
 
-        const ball = new Ball(50, 50, 2, 3, 50); // Create ball
+        const ball = new Ball(50, 50, 2, 3.76, 30); // Create ball
         // Animation func
         function repeatme() {
             ball.draw(); // Draw the ball
             ball.move(); // Move the ball
+            ball.rotateBall(); // Increment the angle
             window.requestAnimationFrame(repeatme); // Draw the frame
-
         }
         repeatme(); // Start animation
     </script>
