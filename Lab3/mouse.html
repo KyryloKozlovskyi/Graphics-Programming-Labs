@@ -2,44 +2,55 @@
 
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>Canvas</title>
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
 
-    <style type="text/css">
-      canvas {
-        border: 1px solid grey; 
-      }
-    </style>
+  <style type="text/css">
+    canvas {
+      border: 1px solid grey;
+    }
+  </style>
 
-  </head>
+</head>
 
-  <body>
-	<p>This is a paragraph.</p>
+<body>
+  <p>This is a paragraph.</p>
 
-    <canvas id="canvas-for-ball"></canvas>
+  <canvas id="canvas-for-ball"></canvas>
 
-    <script type="text/javascript">
-      var noClicks = 0;
-      
-      // Gets a handle to the element with id canvasOne.
-      var canvas = document.getElementById("canvas-for-ball");
-      // Get a 2D context for the canvas.
-      var ctx = canvas.getContext("2d");
-      // Make the fill style red.
-      ctx.fillStyle = "rgb(255, 0, 0)";
-      
-      canvas.addEventListener("click", function(event) { 
-        console.log(event); // Event log
-        ctx.beginPath();
-        ctx.arc(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop, 6, 0, 2 * Math.PI); // Circle is drawn at the mouse cursor position
-        ctx.fill();
-        
-        noClicks += 1;
-        console.log(noClicks);
-      });
-    </script>
+  <script type="text/javascript">
+    var noClicks = 0;
 
-  </body>
+    // Gets a handle to the element with id canvasOne.
+    var canvas = document.getElementById("canvas-for-ball");
+    // Get a 2D context for the canvas.
+    var ctx = canvas.getContext("2d");
+    // Make the fill style red.
+    ctx.fillStyle = "rgb(255, 0, 0)";
+    // Calculate position of the canvas DOM element on the page
+    var canvasPosition = {
+      x: canvas.offsetLeft,
+      y: canvas.offsetTop
+    };
+
+    canvas.addEventListener("click", function (event) {
+      // Get current mouse position relative to the browser window
+      var mouse = {
+        x: event.clientX - canvasPosition.x,
+        y: event.clientY - canvasPosition.y
+      };
+
+      console.log(event); // Event log
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 6, 0, 2 * Math.PI); // Circle is drawn at the mouse cursor position
+      ctx.fill();
+
+      noClicks += 1;
+      console.log(noClicks);
+    });
+  </script>
+
+</body>
 
 </html>
