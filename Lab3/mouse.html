@@ -32,7 +32,7 @@
       canvas.addEventListener("click", function(event) { 
         console.log(event); // Event log
         ctx.beginPath();
-        ctx.arc(event.clientX, event.clientY, 6, 0, 2 * Math.PI); // Ball drawn at the pointer position
+        ctx.arc(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop, 6, 0, 2 * Math.PI); // Circle is drawn at the mouse cursor position
         ctx.fill();
         
         noClicks += 1;
