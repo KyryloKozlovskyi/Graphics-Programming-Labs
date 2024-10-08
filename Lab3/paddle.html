@@ -57,6 +57,12 @@
                 }
                 this.draw();
             }
+
+             // Move the paddle with mouse
+             moveTo(y) {
+                this.y = y;
+                this.draw();
+            }
         }
 
         // Create a new paddle object
@@ -75,7 +81,7 @@
                 y: event.clientY - canvasPosition.y
             };
             paddle = new Paddle(mouse.x, mouse.y, 25, 150); // Create a new paddle object
-            
+
             console.log(event); // Event log
             paddle.draw(); // Draw the paddle
             noClicks += 1;
@@ -99,6 +105,20 @@
                         paddle.move('down');
                         break;
                 }
+            }
+        });
+
+        // Mouse move event listener
+        document.addEventListener("mousemove", function (e) {
+            if (paddle) {
+                // Calculate position of the canvas DOM element on the page
+                var canvasPosition = {
+                    x: canvas.offsetLeft,
+                    y: canvas.offsetTop
+                };
+                // Get current mouse position relative to the browser window
+                var mouseY = e.clientY - canvasPosition.y;
+                paddle.moveTo(mouseY);
             }
         });
 
