@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <title>Paddle</title>
@@ -29,27 +31,38 @@
 
         // Paddle class
         class Paddle {
-            //  Constructor for paddle class with width, height parameters
-            constructor(width, height) {
+            // Constructor for paddle class with x, y, width, height parameters
+            constructor(x, y, width, height) {
                 this.width = width;
                 this.height = height;
+                this.x = x;
+                this.y = y;
             }
 
             // Draw paddle
-            draw(x, y) {
+            draw() {
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
                 ctx.beginPath();
-                ctx.rect(x, y, this.width, this.height);
+                ctx.rect(this.x, this.y, this.width, this.height); // Draw the paddle
                 ctx.stroke();
             }
 
             // Move the paddle
-            move() {
-
+            move(direction) {
+                const step = 10; // Step size for paddle movement
+                if (direction === 'up' && this.y > 0) {
+                    this.y -= step;
+                } else if (direction === 'down' && this.y < canvas.height - this.height) {
+                    this.y += step;
+                }
+                this.draw();
             }
-
         }
+
+        // Create a new paddle object
+        var paddle;
+
         // Mouse event listener
-        paddle = new Paddle(25, 150); // Create a new paddle object
         canvas.addEventListener("click", function (event) {
             // Calculate position of the canvas DOM element on the page
             var canvasPosition = {
@@ -61,12 +74,41 @@
                 x: event.clientX - canvasPosition.x,
                 y: event.clientY - canvasPosition.y
             };
-
+            paddle = new Paddle(mouse.x, mouse.y, 25, 150); // Create a new paddle object
+            
             console.log(event); // Event log
-            paddle.draw(mouse.x, mouse.y); // Draw the paddle
+            paddle.draw(); // Draw the paddle
             noClicks += 1;
             console.log(noClicks);
         });
+
+        // Keyboard event listener
+        $(document.body).on('keydown', function (e) {
+            if (paddle) {
+                console.log(e.which);
+                switch (e.which) {
+                    // key code for up arrow
+                    case 38:
+                        console.log('up arrow key pressed!');
+                        paddle.move('up');
+                        break;
+
+                    // key code for down arrow
+                    case 40:
+                        console.log('down arrow key pressed!');
+                        paddle.move('down');
+                        break;
+                }
+            }
+        });
+
+        function repeatme() {
+            if (paddle) {
+                paddle.draw(); // Draw the paddle
+            }
+            window.requestAnimationFrame(repeatme); // Draw the frame
+        }
+        repeatme(); // Start animation
     </script>
 </body>
 
