@@ -45,7 +45,6 @@
                     console.log('down arrow key pressed!');
                     paddle1.move('down');
                     break;
-
             }
         });
 
@@ -54,21 +53,20 @@
             console.log(e.which);
             switch (e.which) {
                 // key code for up arrow
-                case 37:
+                case 188:
                     console.log('up arrow key pressed!');
                     paddle2.move('up');
                     break;
 
                 // key code for down arrow
-                case 39:
+                case 190:
                     console.log('down arrow key pressed!');
                     paddle2.move('down');
                     break;
-
             }
         });
-        /*
-        // Mouse movement event listener
+
+        // Mouse movement event listener for Paddle1
         document.addEventListener("mousemove", function (e) {
 
             // Calculate position of the canvas DOM element on the page
@@ -79,9 +77,21 @@
             // Get current mouse position relative to the browser window
             var mouseY = e.clientY - canvasPosition.y;
             paddle1.moveTo(mouseY);
-
         });
-        */
+
+
+        // Mouse movement event listener for Paddle2
+        document.addEventListener("mousemove", function (e) {
+
+            // Calculate position of the canvas DOM element on the page
+            var canvasPosition = {
+                x: canvas.offsetLeft,
+                y: canvas.offsetTop
+            };
+            // Get current mouse position relative to the browser window
+            var mouseY = e.clientY - canvasPosition.y;
+            paddle2.moveTo(mouseY);
+        });
 
         function repeatme() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas

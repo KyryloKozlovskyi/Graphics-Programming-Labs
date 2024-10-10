@@ -27,7 +27,13 @@ class Paddle {
 
     // Move the paddle with mouse
     moveTo(y) {
-        this.y = y;
+        if (y < 0) {
+            this.y = 0;
+        } else if (y > canvas.height - this.height) {
+            this.y = canvas.height - this.height;
+        } else {
+            this.y = y;
+        }
         this.draw();
     }
 }
