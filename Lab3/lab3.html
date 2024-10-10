@@ -118,12 +118,10 @@
 
         function repeatme() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
-
             paddle1.draw(); // Draw the paddle
             paddle2.draw(); // Draw the paddle
             ball1.draw(ctx); // Draw the ball
             ball1.move(ctx); // Move the ball
-
             window.requestAnimationFrame(repeatme); // Draw the frame
         }
         repeatme(); // Start animation

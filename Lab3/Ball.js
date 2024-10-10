@@ -9,6 +9,8 @@ class Ball {
         this.radius = radius;
         this.rotation = rotation; // Rotation speed of the peace sign
         this.angle = 0; // Start angle at 0
+        this.gravity = 0.4; // Gravity constant
+        this.energyLoss = 0.9; // Energy loss on each bounce
     }
 
     // Draw peace sign
@@ -34,13 +36,16 @@ class Ball {
 
     // Move ball
     move(ctx) {
+        // Apply gravity to the vertical speed
+        this.yspeed += this.gravity;
+
         // Update the x, y location
         this.y += this.yspeed;
         this.x += this.xspeed;
 
         // Up -> Down bounce
         if (this.y >= ctx.canvas.height - this.radius) { // If the ball hits the bottom
-            this.yspeed *= -1; // Reverse the yspeed
+            this.yspeed *= -1 * this.energyLoss; // Reverse the yspeed and apply energy loss
             this.y = ctx.canvas.height - this.radius; // Adjust position
         } else if (this.y <= this.radius) { // If the ball hits the top
             this.yspeed *= -1; // Reverse the yspeed
@@ -57,6 +62,7 @@ class Ball {
         }
     }
 
+    // Change the speed of the peace sign
     changeRotation(newSpeed) {
         this.rotation = newSpeed;
     }
