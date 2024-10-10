@@ -56,4 +56,8 @@ class Ball {
             this.x = this.radius; // Adjust position
         }
     }
+
+    changeRotation(newSpeed) {
+        this.rotation = newSpeed;
+    }
 }

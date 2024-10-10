@@ -28,9 +28,10 @@
         var canvas = document.getElementById("canvas-for-ball");
         // 2d context
         var ctx = canvas.getContext("2d");
+        rotationSpeed = 0.03;
         paddle1 = new Paddle(25, (canvas.height / 2) - 75, 25, 150); // Create a new paddle object
         paddle2 = new Paddle(450, (canvas.height / 2) - 75, 25, 150); // Create a new paddle object
-        ball1 = new Ball(250, 50, 2, 3.76, 30, 0.03); // Create ball
+        ball1 = new Ball(250, 50, 2, 3.76, 30, rotationSpeed); // Create ball
 
         // Keyboard event listener Paddle1
         $(document.body).on('keydown', function (e) {
@@ -55,15 +56,35 @@
             console.log(e.which);
             switch (e.which) {
                 // key code for up arrow
-                case 188:
+                case 37:
                     console.log('up arrow key pressed!');
                     paddle2.move('up');
                     break;
 
                 // key code for down arrow
-                case 190:
+                case 39:
                     console.log('down arrow key pressed!');
                     paddle2.move('down');
+                    break;
+            }
+        });
+
+        // Keyboard event listener Ball rotation speed
+        $(document.body).on('keydown', function (e) {
+            console.log(e.which);
+            switch (e.which) {
+                // key code for up arrow
+                case 188:
+                    console.log('up arrow key pressed!');
+                    rotationSpeed += 0.01;
+                    ball1.changeRotation(rotationSpeed);
+                    break;
+
+                // key code for down arrow
+                case 190:
+                    console.log('down arrow key pressed!');
+                    rotationSpeed -= 0.01;
+                    ball1.changeRotation(rotationSpeed);
                     break;
             }
         });
