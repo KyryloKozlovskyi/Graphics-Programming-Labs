@@ -3,6 +3,7 @@
 
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script src="Paddle.js"></script>
+<script src="Ball.js"></script>
 
 <head>
     <meta charset="UTF-8">
@@ -29,6 +30,7 @@
         var ctx = canvas.getContext("2d");
         paddle1 = new Paddle(25, (canvas.height / 2) - 75, 25, 150); // Create a new paddle object
         paddle2 = new Paddle(450, (canvas.height / 2) - 75, 25, 150); // Create a new paddle object
+        const ball1 = new Ball(250, 50, 2, 3.76, 30); // Create ball
 
         // Keyboard event listener Paddle1
         $(document.body).on('keydown', function (e) {
@@ -98,6 +100,8 @@
 
             paddle1.draw(); // Draw the paddle
             paddle2.draw(); // Draw the paddle
+            ball1.draw(ctx); // Draw the ball
+            ball1.move(ctx); // Move the ball
 
             window.requestAnimationFrame(repeatme); // Draw the frame
         }
