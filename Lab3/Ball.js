@@ -1,36 +1,35 @@
 // Ball class
 class Ball {
     // Constructor for ball class with x, y, xspeed, yspeed, radius parameters
-    constructor(x, y, xspeed, yspeed, radius) {
+    constructor(x, y, xspeed, yspeed, radius, rotation) {
         this.x = x;
         this.y = y;
         this.xspeed = xspeed;
         this.yspeed = yspeed;
         this.radius = radius;
+        this.rotation = rotation; // Rotation speed of the peace sign
+        this.angle = 0; // Start angle at 0
     }
 
     // Draw peace sign
     draw(ctx) {
+        this.angle += this.rotation; // Increment the angle by the rotation speed
         ctx.beginPath(); // Start drawing the peace sign
 
         // Outer circle
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-        ctx.stroke();
 
-        // Vertical line
-        ctx.moveTo(this.x, this.y - this.radius); // Start from the top of the circle
-        ctx.lineTo(this.x, this.y + this.radius); // Draw a line to the bottom of the circle
-        ctx.stroke(); // Draw the line
+        // Draw a vertical line
+        ctx.moveTo(this.x + this.radius * Math.sin(this.angle - Math.PI), this.y + this.radius * Math.cos(this.angle - Math.PI));
+        ctx.lineTo(this.x + this.radius * Math.sin(this.angle), this.y + this.radius * Math.cos(this.angle));
 
-        // Left diagonal line
-        ctx.moveTo(this.x, this.y); // Start from the center of the circle
-        ctx.lineTo(this.x - this.radius * Math.cos(7 * Math.PI / 4), this.y + this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom left of the circle
-        ctx.stroke(); // Draw the line
+        // Draw a left diagonal line
+        ctx.moveTo(this.x - this.radius * Math.cos(this.angle + Math.PI / 4), this.y + this.radius * Math.sin(this.angle + Math.PI / 4));
+        ctx.lineTo(this.x, this.y);
 
-        // Right diagonal line
-        ctx.moveTo(this.x, this.y); // Start from the center of the circle
-        ctx.lineTo(this.x + this.radius * Math.cos(7 * Math.PI / 4), this.y + this.radius * Math.sin(Math.PI / 4)); // Draw a line to the bottom right of the circle
-        ctx.stroke(); // Draw the line
+        // Draw a right diagonal line
+        ctx.lineTo(this.x + this.radius * Math.sin(this.angle + Math.PI / 4), this.y + this.radius * Math.cos(this.angle + Math.PI / 4));
+        ctx.stroke(); // Draw the lines
     }
 
     // Move ball

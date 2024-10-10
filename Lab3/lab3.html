@@ -30,7 +30,7 @@
         var ctx = canvas.getContext("2d");
         paddle1 = new Paddle(25, (canvas.height / 2) - 75, 25, 150); // Create a new paddle object
         paddle2 = new Paddle(450, (canvas.height / 2) - 75, 25, 150); // Create a new paddle object
-        const ball1 = new Ball(250, 50, 2, 3.76, 30); // Create ball
+        ball1 = new Ball(250, 50, 2, 3.76, 30, 0.03); // Create ball
 
         // Keyboard event listener Paddle1
         $(document.body).on('keydown', function (e) {
