@@ -1,8 +1,7 @@
 class Paddle {
     // Constructor for paddle class with x, y, width, height parameters
-    constructor(x, y, width, height) {
-        this.width = width;
-        this.height = height;
+    constructor(x, y, radius) {
+        this.radius = radius;
         this.x = x;
         this.y = y;
     }
@@ -10,7 +9,7 @@ class Paddle {
     // Draw paddle
     draw() {
         ctx.beginPath();
-        ctx.rect(this.x, this.y, this.width, this.height); // Draw the paddle
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI); // Draw the paddle ball
         ctx.stroke();
     }
 
@@ -19,7 +18,7 @@ class Paddle {
         const step = 10; // Step size for paddle movement
         if (direction === 'up' && this.y > 0) {
             this.y -= step;
-        } else if (direction === 'down' && this.y < canvas.height - this.height) {
+        } else if (direction === 'down' && this.y < canvas.height - this.radius) {
             this.y += step;
         }
         this.draw();
@@ -29,8 +28,8 @@ class Paddle {
     moveTo(y) {
         if (y < 0) {
             this.y = 0;
-        } else if (y > canvas.height - this.height) {
-            this.y = canvas.height - this.height;
+        } else if (y > canvas.height - this.radius) {
+            this.y = canvas.height - this.radius;
         } else {
             this.y = y;
         }
