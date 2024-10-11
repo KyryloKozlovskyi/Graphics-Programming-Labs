@@ -66,4 +66,16 @@ class Ball {
     changeRotation(newSpeed) {
         this.rotation = newSpeed;
     }
+
+    getX() {
+        return this.x
+    }
+
+    getY() {
+        return this.y
+    }
+
+    getR() {
+        return this.radius
+    }
 }

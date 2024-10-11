@@ -26,13 +26,27 @@ class Paddle {
 
     // Move the paddle with mouse
     moveTo(y) {
-        if (y < 0) {
-            this.y = 0;
+        if (y < this.radius) {
+            this.y = this.radius;
         } else if (y > canvas.height - this.radius) {
             this.y = canvas.height - this.radius;
         } else {
             this.y = y;
         }
         this.draw();
+    }
+
+    collisionDetector(xBall, yBall, rBall) {
+        // Message up one the screen for 18 frames
+        // Frame counter set to 0 on the collision
+        // If frame counter < 18  display the message
+        //console.log("TST")
+        //console.log(xBall, yBall, rBall)
+        //console.log(this.x, this.y, this.radius + " PADDLE")
+        var distance = Math.sqrt(Math.pow(xBall - this.x, 2) + Math.pow(yBall - this.y, 2));
+        console.log(distance)
+        if (distance < rBall + this.radius) {
+            console.log("COLLISION");
+        }
     }
 }

@@ -29,9 +29,10 @@
         // 2d context
         var ctx = canvas.getContext("2d");
         rotationSpeed = 0.03;
-        paddle1 = new Paddle(50, (canvas.height / 2) - 75, 25); // Create a new paddle object
-        paddle2 = new Paddle(450, (canvas.height / 2) - 75, 25); // Create a new paddle object
+        paddle1 = new Paddle(75, (canvas.height / 2) - 75, 50); // Create a new paddle object
+        paddle2 = new Paddle(425, (canvas.height / 2) - 75, 50); // Create a new paddle object
         ball1 = new Ball(250, 50, 2, 3.76, 30, rotationSpeed); // Create ball
+
 
         // Keyboard event listener Paddle1
         $(document.body).on('keydown', function (e) {
@@ -118,10 +119,13 @@
 
         function repeatme() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
+            paddle1.collisionDetector(ball1.getX(), ball1.getY(), ball1.getR())
+            
             paddle1.draw(); // Draw the paddle
             paddle2.draw(); // Draw the paddle
             ball1.draw(ctx); // Draw the ball
             ball1.move(ctx); // Move the ball
+            
             window.requestAnimationFrame(repeatme); // Draw the frame
         }
         repeatme(); // Start animation
