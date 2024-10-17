@@ -41,13 +41,13 @@
                 // key code for up arrow
                 case 38:
                     console.log('up arrow key pressed!');
-                    paddle1.move('up');
+                    paddle1.move('up', ctx);
                     break;
 
                 // key code for down arrow
                 case 40:
                     console.log('down arrow key pressed!');
-                    paddle1.move('down');
+                    paddle1.move('down', ctx);
                     break;
             }
         });
@@ -59,13 +59,13 @@
                 // key code for up arrow
                 case 37:
                     console.log('up arrow key pressed!');
-                    paddle2.move('up');
+                    paddle2.move('up', ctx);
                     break;
 
                 // key code for down arrow
                 case 39:
                     console.log('down arrow key pressed!');
-                    paddle2.move('down');
+                    paddle2.move('down', ctx);
                     break;
             }
         });
@@ -100,7 +100,7 @@
             };
             // Get current mouse position relative to the browser window
             var mouseY = e.clientY - canvasPosition.y;
-            paddle1.moveTo(mouseY);
+            paddle1.moveTo(mouseY, ctx);
         });
 
 
@@ -114,17 +114,19 @@
             };
             // Get current mouse position relative to the browser window
             var mouseY = e.clientY - canvasPosition.y;
-            paddle2.moveTo(mouseY);
+            paddle2.moveTo(mouseY, ctx);
         });
 
         function repeatme() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
-            paddle1.collisionDetector(ball1.getX(), ball1.getY(), ball1.getR(), ctx)
+        
 
-            paddle1.draw(); // Draw the paddle
-            paddle2.draw(); // Draw the paddle
+            paddle1.draw(ctx); // Draw the paddle
+            paddle2.draw(ctx); // Draw the paddle
             ball1.draw(ctx); // Draw the ball
             ball1.move(ctx); // Move the ball
+
+            paddle1.collisionDetector(ball1, ctx);
 
             window.requestAnimationFrame(repeatme); // Draw the frame
         }

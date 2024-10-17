@@ -1,6 +1,6 @@
 // Ball class
 class Ball {
-    // Constructor for ball class with x, y, xspeed, yspeed, radius parameters
+    // Constructor for ball class with x, y, xspeed, yspeed, radius, rotation parameters
     constructor(x, y, xspeed, yspeed, radius, rotation) {
         this.x = x;
         this.y = y;
@@ -9,7 +9,7 @@ class Ball {
         this.radius = radius;
         this.rotation = rotation; // Rotation speed of the peace sign
         this.angle = 0; // Start angle at 0
-        this.gravity = 0.4; // Gravity constant
+        this.gravity = 0.0001; // Gravity constant
         this.energyLoss = 0.9; // Energy loss on each bounce
     }
 
@@ -62,20 +62,7 @@ class Ball {
         }
     }
 
-    // Change the speed of the peace sign
     changeRotation(newSpeed) {
         this.rotation = newSpeed;
-    }
-
-    getX() {
-        return this.x
-    }
-
-    getY() {
-        return this.y
-    }
-
-    getR() {
-        return this.radius
     }
 }
