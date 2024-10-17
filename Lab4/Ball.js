@@ -19,10 +19,13 @@ class Ball {
     draw(ctx) {
         this.angle += this.rotation; // Increment the angle by the rotation speed
         ctx.beginPath(); // Start drawing the peace sign
-        ctx.fillStyle = this.color; // Set the color
-
+    
         // Outer circle
+        ctx.fillStyle = this.color; // Set the color
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "#000000" // Reset the color
 
         // Draw a vertical line
         ctx.moveTo(this.x + this.radius * Math.sin(this.angle - Math.PI), this.y + this.radius * Math.cos(this.angle - Math.PI));
@@ -35,8 +38,6 @@ class Ball {
         // Draw a right diagonal line
         ctx.lineTo(this.x + this.radius * Math.sin(this.angle + Math.PI / 4), this.y + this.radius * Math.cos(this.angle + Math.PI / 4));
         ctx.stroke(); // Draw the lines
-        ctx.fill();
-        ctx.fillStyle = "#000000" // Reset the color
     }
 
     // Move ball
