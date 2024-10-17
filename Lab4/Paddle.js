@@ -4,6 +4,7 @@ class Paddle {
         this.radius = radius;
         this.x = x;
         this.y = y;
+        this.collisionTime = null; // To store the time of collision
     }
 
     // Draw paddle
@@ -36,7 +37,8 @@ class Paddle {
         this.draw();
     }
 
-    collisionDetector(xBall, yBall, rBall) {
+    collisionDetector(xBall, yBall, rBall, ctx) {
+        //console.log(frameCounter);
         // Message up one the screen for 18 frames
         // Frame counter set to 0 on the collision
         // If frame counter < 18  display the message
@@ -44,9 +46,20 @@ class Paddle {
         //console.log(xBall, yBall, rBall)
         //console.log(this.x, this.y, this.radius + " PADDLE")
         var distance = Math.sqrt(Math.pow(xBall - this.x, 2) + Math.pow(yBall - this.y, 2));
-        console.log(distance)
+        const currentTime = performance.now();
+        //console.log(distance)
         if (distance < rBall + this.radius) {
-            console.log("COLLISION");
+            //ctx.font = "50px Arial";
+            //ctx.fillText("Collision", 10, 80);
+            this.collisionTime = currentTime; // Store the time of collision
+            console.log("Collision detected at time: " + currentTime); // Log the time of collision
+        }
+        
+        // Display the message if collision was detected within the last 0.75 seconds
+        if (this.collisionTime && currentTime - this.collisionTime < 750) {
+            ctx.font = "50px Arial";
+            ctx.fillStyle = "red";
+            ctx.fillText("Collision", 10, 80);
         }
     }
 }
