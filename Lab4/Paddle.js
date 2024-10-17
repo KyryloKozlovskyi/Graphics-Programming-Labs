@@ -1,10 +1,11 @@
 class Paddle {
-    // Constructor for paddle class with x, y, width, height parameters
+    // Constructor for paddle class with x, y, radius parameters
     constructor(x, y, radius) {
         this.radius = radius;
         this.x = x;
         this.y = y;
-        this.collisionTime; // To store the time of collision
+        this.collisionTime = null; // To store the time of collision
+        this.score = 0; // Initialize score
     }
 
     // Draw paddle
@@ -50,17 +51,23 @@ class Paddle {
             matchBall.yspeed *= -1;
 
             // Adjust the position of the match ball to prevent it from getting stuck
-            const overlap = matchBall.radius + this.radius - distance;
+            const overlap = matchBall.radius + this.radius - distance + 5;
             const angle = Math.atan2(matchBall.y - this.y, matchBall.x - this.x);
             matchBall.x += Math.cos(angle) * overlap;
             matchBall.y += Math.sin(angle) * overlap;
+            console.log("Collision detected"); // Log the collision
+            this.score += 1; // Increase the score
+            console.log("Score: ", this.score); // Log the score
         }
 
         // Display the message if collision was detected within the last 0.75 seconds
         if (this.collisionTime && currentTime - this.collisionTime < 750) {
-            ctx.font = "50px Arial";
-            ctx.fillStyle = "red";
-            ctx.fillText("Collision", 10, 80);
+            ctx.font = "25px Arial";
+            ctx.fillText("Collision", this.x - 50, 75);
         }
+
+        // Display the score
+        ctx.font = "25px Arial";
+        ctx.fillText("Score: " + this.score, this.x - 50, 25);
     }
 }

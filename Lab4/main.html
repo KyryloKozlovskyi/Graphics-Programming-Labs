@@ -28,13 +28,13 @@
         var canvas = document.getElementById("canvas-for-ball");
         // 2d context
         var ctx = canvas.getContext("2d");
+        // Declarations
         rotationSpeed = 0.03;
-        paddle1 = new Paddle(75, (canvas.height / 2) - 75, 50); // Create a new paddle object
-        paddle2 = new Paddle(425, (canvas.height / 2) - 75, 50); // Create a new paddle object
-        ball1 = new Ball(250, 50, 2, 3.76, 30, rotationSpeed); // Create ball
+        paddle1 = new Paddle(75, (canvas.height / 2) - 75, 50); // Create a new paddle1 object
+        paddle2 = new Paddle(425, (canvas.height / 2) - 75, 50); // Create a new paddle2 object
+        ball1 = new Ball(250, 50, 5, 5, 50, rotationSpeed); // Create a new ball1 object
 
-
-        // Keyboard event listener Paddle1
+        // Keyboard event listener for Paddle1
         $(document.body).on('keydown', function (e) {
             console.log(e.which);
             switch (e.which) {
@@ -43,7 +43,6 @@
                     console.log('up arrow key pressed!');
                     paddle1.move('up', ctx);
                     break;
-
                 // key code for down arrow
                 case 40:
                     console.log('down arrow key pressed!');
@@ -56,15 +55,14 @@
         $(document.body).on('keydown', function (e) {
             console.log(e.which);
             switch (e.which) {
-                // key code for up arrow
+                // key code for left arrow
                 case 37:
-                    console.log('up arrow key pressed!');
+                    console.log('up (left) arrow key pressed!');
                     paddle2.move('up', ctx);
                     break;
-
-                // key code for down arrow
+                // key code for right arrow
                 case 39:
-                    console.log('down arrow key pressed!');
+                    console.log('down (right) arrow key pressed!');
                     paddle2.move('down', ctx);
                     break;
             }
@@ -74,16 +72,15 @@
         $(document.body).on('keydown', function (e) {
             console.log(e.which);
             switch (e.which) {
-                // key code for up arrow
+                // key code for less than key
                 case 188:
-                    console.log('up arrow key pressed!');
+                    console.log('less than key pressed! (increments rotation speed)');
                     rotationSpeed += 0.01;
                     ball1.changeRotation(rotationSpeed);
                     break;
-
-                // key code for down arrow
+                // key code for greater than key
                 case 190:
-                    console.log('down arrow key pressed!');
+                    console.log('greater than key pressed! (decrements rotation speed)');
                     rotationSpeed -= 0.01;
                     ball1.changeRotation(rotationSpeed);
                     break;
@@ -92,7 +89,6 @@
 
         // Mouse movement event listener for Paddle1
         document.addEventListener("mousemove", function (e) {
-
             // Calculate position of the canvas DOM element on the page
             var canvasPosition = {
                 x: canvas.offsetLeft,
@@ -103,10 +99,8 @@
             paddle1.moveTo(mouseY, ctx);
         });
 
-
         // Mouse movement event listener for Paddle2
         document.addEventListener("mousemove", function (e) {
-
             // Calculate position of the canvas DOM element on the page
             var canvasPosition = {
                 x: canvas.offsetLeft,
@@ -117,17 +111,15 @@
             paddle2.moveTo(mouseY, ctx);
         });
 
+        // Function to repeat the animation
         function repeatme() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
-        
-
             paddle1.draw(ctx); // Draw the paddle
             paddle2.draw(ctx); // Draw the paddle
             ball1.draw(ctx); // Draw the ball
-            ball1.move(ctx); // Move the ball
-
-            paddle1.collisionDetector(ball1, ctx);
-
+            ball1.move(ctx, paddle1, paddle2); // Move the ball
+            paddle1.collisionDetector(ball1, ctx); // Detect collision with paddle1
+            paddle2.collisionDetector(ball1, ctx); // Detect collision with paddle1
             window.requestAnimationFrame(repeatme); // Draw the frame
         }
         repeatme(); // Start animation

@@ -9,14 +9,16 @@ class Ball {
         this.radius = radius;
         this.rotation = rotation; // Rotation speed of the peace sign
         this.angle = 0; // Start angle at 0
-        this.gravity = 0.0001; // Gravity constant
+        this.gravity = 0.01; // Gravity constant
         this.energyLoss = 0.9; // Energy loss on each bounce
+
     }
 
     // Draw peace sign
     draw(ctx) {
         this.angle += this.rotation; // Increment the angle by the rotation speed
         ctx.beginPath(); // Start drawing the peace sign
+        ctx.fillStyle = "red";
 
         // Outer circle
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
@@ -32,10 +34,11 @@ class Ball {
         // Draw a right diagonal line
         ctx.lineTo(this.x + this.radius * Math.sin(this.angle + Math.PI / 4), this.y + this.radius * Math.cos(this.angle + Math.PI / 4));
         ctx.stroke(); // Draw the lines
+        ctx.fill();
     }
 
     // Move ball
-    move(ctx) {
+    move(ctx, paddle1, paddle2) {
         // Apply gravity to the vertical speed
         this.yspeed += this.gravity;
 
@@ -56,9 +59,19 @@ class Ball {
         if (this.x >= ctx.canvas.width - this.radius) { // If the ball hits the right
             this.xspeed *= -1; // Reverse the xspeed
             this.x = ctx.canvas.width - this.radius; // Adjust position
+            paddle2.score -= 1; // Decrease the score for paddle2
         } else if (this.x <= this.radius) { // If the ball hits the left
             this.xspeed *= -1; // Reverse the xspeed
             this.x = this.radius; // Adjust position
+            paddle1.score -= 1; // Decrease the score for paddle1
+        }
+
+        // Reset the score to 0 if it goes below 0
+        if (paddle1.score < 0) {
+            paddle1.score = 0;
+        }
+        else if (paddle2.score < 0) {
+            paddle2.score = 0;
         }
     }
 
