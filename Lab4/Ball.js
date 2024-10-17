@@ -1,7 +1,7 @@
 // Ball class
 class Ball {
     // Constructor for ball class with x, y, xspeed, yspeed, radius, rotation parameters
-    constructor(x, y, xspeed, yspeed, radius, rotation) {
+    constructor(x, y, xspeed, yspeed, radius, rotation, color) {
         this.x = x;
         this.y = y;
         this.xspeed = xspeed;
@@ -11,6 +11,7 @@ class Ball {
         this.angle = 0; // Start angle at 0
         this.gravity = 0.01; // Gravity constant
         this.energyLoss = 0.9; // Energy loss on each bounce
+        this.color = color;
 
     }
 
@@ -18,7 +19,7 @@ class Ball {
     draw(ctx) {
         this.angle += this.rotation; // Increment the angle by the rotation speed
         ctx.beginPath(); // Start drawing the peace sign
-        ctx.fillStyle = "red";
+        ctx.fillStyle = this.color; // Set the color
 
         // Outer circle
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
@@ -35,6 +36,7 @@ class Ball {
         ctx.lineTo(this.x + this.radius * Math.sin(this.angle + Math.PI / 4), this.y + this.radius * Math.cos(this.angle + Math.PI / 4));
         ctx.stroke(); // Draw the lines
         ctx.fill();
+        ctx.fillStyle = "#000000" // Reset the color
     }
 
     // Move ball

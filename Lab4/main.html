@@ -32,7 +32,7 @@
         rotationSpeed = 0.03;
         paddle1 = new Paddle(75, (canvas.height / 2) - 75, 50); // Create a new paddle1 object
         paddle2 = new Paddle(425, (canvas.height / 2) - 75, 50); // Create a new paddle2 object
-        ball1 = new Ball(250, 50, 5, 5, 50, rotationSpeed); // Create a new ball1 object
+        ball1 = new Ball(250, 50, 5, 5, 30, rotationSpeed, "Blue"); // Create a new ball1 object
 
         // Keyboard event listener for Paddle1
         $(document.body).on('keydown', function (e) {
