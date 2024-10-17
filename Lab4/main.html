@@ -36,6 +36,18 @@
         balls = []; // Create an array to store the ball objects
         balls.push(ball1); // Push the ball1 object to the array
 
+        // Function to remove a ball if clicked
+        function removeBall(x, y) {
+            for (let i = 0; i < balls.length; i++) {
+                const ball = balls[i];
+                const distance = Math.sqrt(Math.pow(ball.x - x, 2) + Math.pow(ball.y - y, 2));
+                if (distance < ball.radius) {
+                    balls.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
         // Function to create a new ball at a random position
         function createNewBall() {
             const x = Math.random() * (canvas.width - 60) + 30;
@@ -129,10 +141,21 @@
             paddle2.moveTo(mouseY, ctx);
         });
 
-        // 
+        // Double click event listener to create a new ball
         document.addEventListener("dblclick", function (e) {
             console.log('New ball created!');
             createNewBall();
+        });
+
+        // Event listener for click to remove a ball
+        canvas.addEventListener("click", function (event) {
+            const canvasPosition = {
+                x: canvas.offsetLeft,
+                y: canvas.offsetTop
+            };
+            const mouseX = event.clientX - canvasPosition.x;
+            const mouseY = event.clientY - canvasPosition.y;
+            removeBall(mouseX, mouseY);
         });
 
         // Function to repeat the animation
