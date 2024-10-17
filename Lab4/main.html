@@ -33,6 +33,20 @@
         paddle1 = new Paddle(75, (canvas.height / 2) - 75, 50); // Create a new paddle1 object
         paddle2 = new Paddle(425, (canvas.height / 2) - 75, 50); // Create a new paddle2 object
         ball1 = new Ball(250, 50, 5, 5, 30, rotationSpeed, "Teal"); // Create a new ball1 object
+        balls = []; // Create an array to store the ball objects
+        balls.push(ball1); // Push the ball1 object to the array
+
+        // Function to create a new ball at a random position
+        function createNewBall() {
+            const x = Math.random() * (canvas.width - 60) + 30;
+            const y = Math.random() * (canvas.height - 60) + 30;
+            const xspeed = 5;
+            const yspeed = 5;
+            const radius = 30;
+            const rotation = 0.03;
+            const newBall = new Ball(x, y, xspeed, yspeed, radius, rotation, "Teal");
+            balls.push(newBall);
+        }
 
         // Keyboard event listener for Paddle1
         $(document.body).on('keydown', function (e) {
@@ -76,13 +90,17 @@
                 case 188:
                     console.log('less than key pressed! (increments rotation speed)');
                     rotationSpeed += 0.01;
-                    ball1.changeRotation(rotationSpeed);
+                    balls.forEach(ball => {
+                        ball.changeRotation(rotationSpeed);
+                    });
                     break;
                 // key code for greater than key
                 case 190:
                     console.log('greater than key pressed! (decrements rotation speed)');
                     rotationSpeed -= 0.01;
-                    ball1.changeRotation(rotationSpeed);
+                    balls.forEach(ball => {
+                        ball.changeRotation(rotationSpeed);
+                    });
                     break;
             }
         });
@@ -111,15 +129,29 @@
             paddle2.moveTo(mouseY, ctx);
         });
 
+        // 
+        document.addEventListener("dblclick", function (e) {
+            console.log('New ball created!');
+            createNewBall();
+        });
+
         // Function to repeat the animation
         function repeatme() {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
             paddle1.draw(ctx); // Draw the paddle
             paddle2.draw(ctx); // Draw the paddle
-            ball1.draw(ctx); // Draw the ball
-            ball1.move(ctx, paddle1, paddle2); // Move the ball
-            paddle1.collisionDetector(ball1, ctx); // Detect collision with paddle1
-            paddle2.collisionDetector(ball1, ctx); // Detect collision with paddle1
+
+            // Move and draw each ball
+            balls.forEach(ball => {
+                ball.move(ctx, paddle1, paddle2);
+                ball.draw(ctx);
+            });
+
+            // Check for collision for each ball
+            balls.forEach(ball => {
+                paddle1.collisionDetector(ball, ctx);
+                paddle2.collisionDetector(ball, ctx);
+            });
             window.requestAnimationFrame(repeatme); // Draw the frame
         }
         repeatme(); // Start animation
