@@ -35,6 +35,9 @@
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         const sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
+        
+        // Wireframe property
+        material.wireframe = true;
 
         var repeatMe = function () {
             renderer.render(scene, camera);
