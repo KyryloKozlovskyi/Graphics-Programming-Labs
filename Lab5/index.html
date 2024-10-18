@@ -28,6 +28,17 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
+        // Sphere
+        const geometry = new THREE.SphereGeometry(15, 32, 16);
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const sphere = new THREE.Mesh(geometry, material); scene.add(sphere);
+
+        var repeatMe = function () {
+            renderer.render(scene, camera);
+            requestAnimationFrame(repeatMe);
+        }
+
+        repeatMe();
     </script>
 </body>
 
