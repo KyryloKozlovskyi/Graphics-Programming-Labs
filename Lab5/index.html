@@ -15,6 +15,9 @@
 <body>
     <h1>Kyrylo Kozlovskyi</h1>
     <script type="text/javascript">
+        // Variable declarations
+        let width = window.innerWidth;
+        let x_speed = 0.5;
 
         // Implement scene - Create a Three.js scene to hold objects.
         var scene = new THREE.Scene();
@@ -51,9 +54,21 @@
             renderer.render(scene, camera);
             requestAnimationFrame(repeatMe);
 
-            //Code to rotate sphere
+            // Code to rotate sphere
             sphere.rotation.x += 0.01;
             sphere.rotation.y += 0.01
+
+            // Move the sphere from left to right
+            console.log(sphere.position.x);
+            console.log(width / 100);
+            if (sphere.position.x + 15 >= width / 100) {
+                x_speed *= -1;
+            }
+            else if (sphere.position.x - 15 <= (width / 100) * -1) {
+                x_speed *= -1;
+            }
+
+            sphere.position.x += x_speed
         }
 
         repeatMe();
