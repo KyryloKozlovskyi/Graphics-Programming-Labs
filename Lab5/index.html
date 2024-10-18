@@ -20,8 +20,10 @@
         var scene = new THREE.Scene();
 
         // Create a camera with specified properties.
-        var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+
         // Set camera position
+        camera.position.z = 50;
 
         // Implement renderer - Create a WebGL renderer for rendering the scene.
         var renderer = new THREE.WebGLRenderer();
@@ -31,11 +33,16 @@
         // Sphere
         const geometry = new THREE.SphereGeometry(15, 32, 16);
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        const sphere = new THREE.Mesh(geometry, material); scene.add(sphere);
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
 
         var repeatMe = function () {
             renderer.render(scene, camera);
             requestAnimationFrame(repeatMe);
+
+            //Code to rotate sphere
+            sphere.rotation.x += 0.01;
+            sphere.rotation.y += 0.01
         }
 
         repeatMe();
