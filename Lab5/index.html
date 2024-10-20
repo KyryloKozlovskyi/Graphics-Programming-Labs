@@ -15,9 +15,46 @@
 <body>
     <h1>Kyrylo Kozlovskyi</h1>
     <script type="text/javascript">
+        class Sphere {
+            // Constructor to create a sphere
+            constructor(scene, radius = 15, color = 0xffff00, speed = 0.5) {
+                this.radius = radius;
+                this.speed = speed;
+                this.geometry = new THREE.SphereGeometry(radius, 30, 15);
+                this.material = new THREE.MeshLambertMaterial({ color: color });
+                this.sphere = new THREE.Mesh(this.geometry, this.material);
+                scene.add(this.sphere);
+
+                // Initial speed
+                this.x_speed = speed;
+            }
+
+            // Method to update the sphere's position and rotation
+            move(width) {
+                // Log the width and x position of the sphere
+                console.log("Width: " + width + "X position: " + this.sphere.position.x);
+                // Move the sphere from left to right and vice versa
+                if (this.sphere.position.x + this.radius >= width / 30) {
+                    this.x_speed *= -1;
+                } else if (this.sphere.position.x - this.radius <= -width / 30) {
+                    this.x_speed *= -1;
+                }
+                // Move the sphere
+                this.sphere.position.x += this.x_speed;
+            }
+
+            // Method to rotate the sphere
+            rotate() {
+                this.sphere.rotation.x += 0.01;
+                this.sphere.rotation.y += 0.01;
+            }
+        }
+
         // Variable declarations
         let width = window.innerWidth;
-        let x_speed = 0.5;
+        let x_speed = 1;
+        let radius = 15;
+        color = 0xffff00;
 
         // Implement scene - Create a Three.js scene to hold objects.
         var scene = new THREE.Scene();
@@ -33,15 +70,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Sphere
-        const geometry = new THREE.SphereGeometry(15, 32, 16);
-        const material = new THREE.MeshLambertMaterial({ color: 0xffff00 });
-        const sphere = new THREE.Mesh(geometry, material);
-        scene.add(sphere);
-
-        // Wireframe property
-        material.wireframe = false;
-
         // Spotlight
         var spotLight = new THREE.SpotLight(0xffffff);
         spotLight.position.set(1, 0.5, 1);
@@ -50,27 +78,16 @@
         // Set spotlight
         spotLight.position.z = 50;
 
+        // Create a sphere
+        let sphere = new Sphere(scene, radius, color, x_speed);
+
+        // Render the scene
         var repeatMe = function () {
             renderer.render(scene, camera);
             requestAnimationFrame(repeatMe);
-
-            // Code to rotate sphere
-            sphere.rotation.x += 0.01;
-            sphere.rotation.y += 0.01
-
-            // Move the sphere from left to right
-            console.log(sphere.position.x);
-            console.log(width / 100);
-            if (sphere.position.x + 15 >= width / 100) {
-                x_speed *= -1;
-            }
-            else if (sphere.position.x - 15 <= (width / 100) * -1) {
-                x_speed *= -1;
-            }
-
-            sphere.position.x += x_speed
+            sphere.move(width);
+            sphere.rotate();
         }
-
         repeatMe();
     </script>
 </body>
