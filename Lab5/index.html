@@ -24,11 +24,11 @@
                 this.geometry = new THREE.SphereGeometry(radius, 30, 15);
                 this.material = new THREE.MeshLambertMaterial({ color: color });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
+                this.sphere.castShadow = true; // Enable casting shadows
                 // Add the sphere to the scene
                 scene.add(this.sphere);
                 // Initial speed
                 this.x_speed = speed;
-                this.sphere.castShadow = true;
             }
 
             // Method to update the sphere's position and rotation
@@ -88,15 +88,21 @@
         plane.position.y = -radius - 5; // Position the plane below the sphere
         scene.add(plane);
 
-        // Directional light
+        // Directional light with shadow properties
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(50, 50, 50);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
 
+        // Adjust shadow camera for the directional light to cover a wider area
+        directionalLight.shadow.camera.left = -100;
+        directionalLight.shadow.camera.right = 100;
+        directionalLight.shadow.camera.top = 100;
+        directionalLight.shadow.camera.bottom = -100;
+
         // Helper
         var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-       // scene.add(helper);
+        scene.add(helper);
 
         // Render the scene
         var repeatMe = function () {
