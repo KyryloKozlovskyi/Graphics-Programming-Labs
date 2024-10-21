@@ -25,16 +25,21 @@
                 this.material = new THREE.MeshLambertMaterial({ color: color });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; // Enable casting shadows
+                this.sphere.position.set(0, 25, 0); // Set the sphere's position
                 // Add the sphere to the scene
                 scene.add(this.sphere);
                 // Initial speed
                 this.x_speed = speed;
+                this.y_speed = speed;
+                this.gravity = 0.05; // Gravity constant
+                this.bounceFactor = 0.7; // Energy loss factor on bounce
             }
 
             // Method to update the sphere's position and rotation
-            move(width) {
-                // Log the width and x position of the sphere
+            move(width, height) {
+                // Log the width and position of the sphere
                 console.log("Width: " + width + "X position: " + this.sphere.position.x);
+                console.log("Height: " + height + "Y position: " + this.sphere.position.y);
                 // Move the sphere from left to right and vice versa
                 if (this.sphere.position.x + this.radius >= width / 30) {
                     this.x_speed *= -1;
@@ -43,6 +48,16 @@
                 }
                 // Move the sphere
                 this.sphere.position.x += this.x_speed;
+
+                // Apply gravity
+                this.y_speed -= this.gravity; // Increase downward speed due to gravity
+                this.sphere.position.y += this.y_speed; // Update the sphere's vertical position
+
+                // Check for collision with the plane
+                if (this.sphere.position.y - (this.radius * 2) <= -height / 30) { // If the sphere hits the plane
+                    this.sphere.position.y = -height / 30 + (this.radius * 2); // Adjust position to stay above the plane
+                    this.y_speed *= -this.bounceFactor; // Reverse the y_speed and apply energy loss
+                }
             }
 
             // Method to rotate the sphere
@@ -55,7 +70,7 @@
         // Variable declarations
         let width = window.innerWidth;
         let height = window.innerHeight;
-        let x_speed = 1;
+        let x_speed = 2;
         let radius = 15;
         let color = 0xffff00;
 
@@ -66,7 +81,7 @@
         var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
 
         // Set camera position
-        camera.position.set(0, 50, 100);
+        camera.position.set(0, 0, 50);
         camera.lookAt(0, 0, 0);
 
         // Implement renderer - Create a WebGL renderer for rendering the scene.
@@ -108,7 +123,7 @@
         var repeatMe = function () {
             renderer.render(scene, camera);
             requestAnimationFrame(repeatMe);
-            sphere.move(width);
+            sphere.move(width, height);
             sphere.rotate();
         }
         repeatMe();
