@@ -27,7 +27,7 @@
 
                 // Create a sphere
                 this.geometry = new THREE.SphereGeometry(radius, 30, 15);
-                this.material = new THREE.MeshLambertMaterial({ color: color, wireframe: true });
+                this.material = new THREE.MeshLambertMaterial({ color: color, wireframe: true }); // Wireframe material
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; // Enable casting shadows
                 this.sphere.position.set(0, 125, 0); // Set the sphere's position
