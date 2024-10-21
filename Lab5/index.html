@@ -7,8 +7,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Bouncing Sphere</title>
     <style type="text/css">
+        body { margin: 0; overflow: hidden; }
     </style>
 </head>
 
@@ -17,7 +18,7 @@
     <script type="text/javascript">
         class Sphere {
             // Constructor to create a sphere
-            constructor(scene, radius = 15, color = 0xffff00, speed = 0.5) {
+            constructor(scene, radius = 15, color = 0xffff00, speed = 2) {
                 this.radius = radius;
                 this.speed = speed;
                 // Create a sphere
@@ -25,30 +26,28 @@
                 this.material = new THREE.MeshLambertMaterial({ color: color });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; // Enable casting shadows
-                this.sphere.position.set(0, 25, 0); // Set the sphere's position
+                this.sphere.position.set(0, 100, 0); // Set the sphere's position
                 // Add the sphere to the scene
                 scene.add(this.sphere);
                 // Initial speed
                 this.x_speed = speed;
-                this.y_speed = speed;
+                this.y_speed = 0; // Initial vertical speed
                 this.z_speed = speed;
-                this.gravity = 0.05; // Gravity constant
+                this.gravity = 0.1; // Gravity constant
                 this.bounceFactor = 0.7; // Energy loss factor on bounce
             }
 
             // Method to update the sphere's position and rotation
             move(width, height, depth) {
-                // Log the width and position of the sphere
-                console.log("Width: " + width + "X position: " + this.sphere.position.x);
-                console.log("Height: " + height + "Y position: " + this.sphere.position.y);
-                console.log("Depth: " + depth + "Z position: " + this.sphere.position.z);
-                // Move the sphere from left to right and vice versa
+                // Log the position of the sphere
+                console.log(`X: ${this.sphere.position.x}, Y: ${this.sphere.position.y}, Z: ${this.sphere.position.z}`);
+
+                // Move the sphere left to right and vice versa
                 if (this.sphere.position.x + this.radius >= width / 30) {
                     this.x_speed *= -1;
                 } else if (this.sphere.position.x - this.radius <= -width / 30) {
                     this.x_speed *= -1;
                 }
-                // Move the sphere
                 this.sphere.position.x += this.x_speed;
 
                 // Apply gravity
@@ -62,10 +61,10 @@
                     this.y_speed *= -this.bounceFactor; // Reverse the y_speed and apply energy loss
                 }
 
-                // Move the sphere in the Z direction
-                if (this.sphere.position.z + this.radius >= depth) {
+                // Check for collision with the z boundaries
+                if (this.sphere.position.z + this.radius >= depth / 2) {
                     this.z_speed *= -1;
-                } else if (this.sphere.position.z - this.radius <= -depth) {
+                } else if (this.sphere.position.z - this.radius <= -depth / 2) {
                     this.z_speed *= -1;
                 }
                 this.sphere.position.z += this.z_speed;
@@ -82,21 +81,18 @@
         let width = window.innerWidth;
         let height = window.innerHeight;
         let depth = 100;
-        let x_speed = 2;
         let radius = 15;
         let color = 0xffff00;
 
-        // Implement scene - Create a Three.js scene to hold objects.
+        // Create a Three.js scene to hold objects
         var scene = new THREE.Scene();
 
-        // Create a camera with specified properties.
+        // Create a camera
         var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-        // Set camera position
-        camera.position.set(0, 0, 50);
+        camera.position.set(0, 50, 100); // Adjust the camera position for better viewing
         camera.lookAt(0, 0, 0);
 
-        // Implement renderer - Create a WebGL renderer for rendering the scene.
+        // Create a WebGL renderer for rendering the scene
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true; // Enable shadow mapping
@@ -104,7 +100,7 @@
         document.body.appendChild(renderer.domElement);
 
         // Create a sphere
-        let sphere = new Sphere(scene, radius, color, x_speed);
+        let sphere = new Sphere(scene, radius, color);
 
         // Create a plane
         const planeGeometry = new THREE.PlaneGeometry(2000, 2000);
@@ -126,10 +122,6 @@
         directionalLight.shadow.camera.right = 100;
         directionalLight.shadow.camera.top = 100;
         directionalLight.shadow.camera.bottom = -100;
-
-        // Helper
-        var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-        scene.add(helper);
 
         // Render the scene
         var repeatMe = function () {
