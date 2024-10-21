@@ -21,7 +21,7 @@
     <script type="text/javascript">
         class Sphere {
             // Constructor to create a sphere
-            constructor(scene, radius = 15, color = 0xffff00, speed = 2) {
+            constructor(scene, radius = 15, color = 0xffff00, speed = 2, y_pos = 125) {
                 this.radius = radius;
                 this.speed = speed;
 
@@ -30,14 +30,14 @@
                 this.material = new THREE.MeshLambertMaterial({ color: color, wireframe: true }); // Wireframe material
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; // Enable casting shadows
-                this.sphere.position.set(0, 125, 0); // Set the sphere's position
+                this.sphere.position.set(0, y_pos, 0); // Set the sphere's position
                 // Add the sphere and wireframe to the scene
                 scene.add(this.sphere);
 
                 // Initial speed
-                this.x_speed = speed;
+                this.x_speed = (Math.random() - 0.5) * speed;
                 this.y_speed = 0; // Initial vertical speed
-                this.z_speed = speed;
+                this.z_speed = (Math.random() - 0.5) * speed;
                 this.gravity = 0.1; // Gravity constant
                 this.bounceFactor = 0.9; // Energy loss factor on bounce
             }
@@ -68,23 +68,42 @@
                     this.z_speed *= -1;
                     this.sphere.position.z = -depth / 2 + this.radius; // Prevent going out of bounds
                 }
-
                 // Apply gravity
                 this.y_speed -= this.gravity; // Increase downward speed due to gravity
                 this.sphere.position.x += this.x_speed;
                 this.sphere.position.y += this.y_speed;
                 this.sphere.position.z += this.z_speed;
             }
+
+            // Method to detect collisions with other spheres
+            collisionDetector(otherSphere) {
+                // Calculate the distance between the two spheres
+                let distance = Math.sqrt(Math.pow(otherSphere.sphere.position.x - this.sphere.position.x, 2) + Math.pow(otherSphere.sphere.position.y - this.sphere.position.y, 2) + Math.pow(otherSphere.sphere.position.z - this.sphere.position.z, 2));
+                console.log("Other sphere position: " + otherSphere.sphere.position.x + ", " + otherSphere.sphere.position.y + ", " + otherSphere.sphere.position.z);
+                console.log("Distance: " + distance);
+                // If the distance is less than the sum of the radii, a collision is detected
+                if (distance < this.radius + otherSphere.radius) {
+                    console.log("Collision detected");
+                    // Reverse the speed of both spheres
+                    this.x_speed *= -1;
+                    this.y_speed *= -1;
+                    this.z_speed *= -1;
+                    otherSphere.x_speed *= -1;
+                    otherSphere.y_speed *= -1;
+                    otherSphere.z_speed *= -1;
+                }
+            }
+
             // Method to rotate the sphere
             rotate() {
                 this.sphere.rotation.x += 0.05;
-                this.sphere.rotation.y += 0.0;
+                this.sphere.rotation.y += 0.05;
             }
         }
 
         // Variable declarations
-        let width = 150//window.innerWidth;
-        let height = 150//window.innerHeight;
+        let width = 150;
+        let height = 150;
         let depth = 150;
         let radius = 15;
         let color = "#ff13f0";
@@ -94,7 +113,7 @@
 
         // Create a camera
         var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(50, 50, 300); // Adjust the camera position for better viewing
+        camera.position.set(0, 300, 300); // Adjust the camera position for better viewing
         camera.lookAt(0, 0, 0);
 
         // Create a WebGL renderer for rendering the scene
@@ -104,8 +123,9 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Set shadow mapping type
         document.body.appendChild(renderer.domElement);
 
-        // Create a sphere
+        // Create spheres
         let sphere = new Sphere(scene, radius, color);
+        let sphere2 = new Sphere(scene, radius, "Lime", 3, 75);
 
         // Create a plane
         const planeGeometry = new THREE.PlaneGeometry(2000, 2000);
@@ -141,6 +161,9 @@
             requestAnimationFrame(repeatMe);
             sphere.move(width, height, depth);
             sphere.rotate();
+            sphere2.move(width, height, depth);
+            sphere2.rotate();
+            sphere.collisionDetector(sphere2);
         }
         repeatMe();
     </script>
