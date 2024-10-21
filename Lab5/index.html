@@ -9,7 +9,10 @@
     <meta charset="UTF-8">
     <title>Bouncing Sphere</title>
     <style type="text/css">
-        body { margin: 0; overflow: hidden; }
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -21,75 +24,77 @@
             constructor(scene, radius = 15, color = 0xffff00, speed = 2) {
                 this.radius = radius;
                 this.speed = speed;
+
                 // Create a sphere
                 this.geometry = new THREE.SphereGeometry(radius, 30, 15);
-                this.material = new THREE.MeshLambertMaterial({ color: color });
+                this.material = new THREE.MeshLambertMaterial({ color: color, wireframe: true });
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; // Enable casting shadows
-                this.sphere.position.set(0, 100, 0); // Set the sphere's position
-                // Add the sphere to the scene
+                this.sphere.position.set(0, 125, 0); // Set the sphere's position
+                // Add the sphere and wireframe to the scene
                 scene.add(this.sphere);
+
                 // Initial speed
                 this.x_speed = speed;
                 this.y_speed = 0; // Initial vertical speed
                 this.z_speed = speed;
                 this.gravity = 0.1; // Gravity constant
-                this.bounceFactor = 0.7; // Energy loss factor on bounce
+                this.bounceFactor = 0.9; // Energy loss factor on bounce
             }
 
-            // Method to update the sphere's position and rotation
+            // Method to move the sphere
             move(width, height, depth) {
                 // Log the position of the sphere
                 console.log(`X: ${this.sphere.position.x}, Y: ${this.sphere.position.y}, Z: ${this.sphere.position.z}`);
 
-                // Move the sphere left to right and vice versa
-                if (this.sphere.position.x + this.radius >= width / 30) {
+                // Check for collisions with the cube boundaries
+                if (this.sphere.position.x + this.radius >= width / 2) {
                     this.x_speed *= -1;
-                } else if (this.sphere.position.x - this.radius <= -width / 30) {
+                    this.sphere.position.x = width / 2 - this.radius; // Prevent going out of bounds
+                } else if (this.sphere.position.x - this.radius <= -width / 2) {
                     this.x_speed *= -1;
+                    this.sphere.position.x = -width / 2 + this.radius; // Prevent going out of bounds
                 }
-                this.sphere.position.x += this.x_speed;
+
+                if (this.sphere.position.y - this.radius <= 0) { // If the sphere hits the bottom
+                    this.sphere.position.y = this.radius; // Adjust position
+                    this.y_speed *= -this.bounceFactor; // Reverse speed and apply energy loss
+                }
+
+                if (this.sphere.position.z + this.radius >= depth / 2) {
+                    this.z_speed *= -1;
+                    this.sphere.position.z = depth / 2 - this.radius; // Prevent going out of bounds
+                } else if (this.sphere.position.z - this.radius <= -depth / 2) {
+                    this.z_speed *= -1;
+                    this.sphere.position.z = -depth / 2 + this.radius; // Prevent going out of bounds
+                }
 
                 // Apply gravity
                 this.y_speed -= this.gravity; // Increase downward speed due to gravity
-                this.sphere.position.y += this.y_speed; // Update the sphere's vertical position
-                this.sphere.position.z += this.z_speed; // Update the sphere's z position
-
-                // Check for collision with the plane
-                if (this.sphere.position.y - (this.radius * 2) <= -height / 30) { // If the sphere hits the plane
-                    this.sphere.position.y = -height / 30 + (this.radius * 2); // Adjust position to stay above the plane
-                    this.y_speed *= -this.bounceFactor; // Reverse the y_speed and apply energy loss
-                }
-
-                // Check for collision with the z boundaries
-                if (this.sphere.position.z + this.radius >= depth / 2) {
-                    this.z_speed *= -1;
-                } else if (this.sphere.position.z - this.radius <= -depth / 2) {
-                    this.z_speed *= -1;
-                }
+                this.sphere.position.x += this.x_speed;
+                this.sphere.position.y += this.y_speed;
                 this.sphere.position.z += this.z_speed;
             }
-
             // Method to rotate the sphere
             rotate() {
-                this.sphere.rotation.x += 0.01;
-                this.sphere.rotation.y += 0.01;
+                this.sphere.rotation.x += 0.05;
+                this.sphere.rotation.y += 0.0;
             }
         }
 
         // Variable declarations
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        let depth = 100;
+        let width = 150//window.innerWidth;
+        let height = 150//window.innerHeight;
+        let depth = 150;
         let radius = 15;
-        let color = 0xffff00;
+        let color = "#ff13f0";
 
         // Create a Three.js scene to hold objects
         var scene = new THREE.Scene();
 
         // Create a camera
         var camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 50, 100); // Adjust the camera position for better viewing
+        camera.position.set(50, 50, 300); // Adjust the camera position for better viewing
         camera.lookAt(0, 0, 0);
 
         // Create a WebGL renderer for rendering the scene
@@ -111,17 +116,24 @@
         plane.position.y = -radius - 5; // Position the plane below the sphere
         scene.add(plane);
 
+        // Create a cube
+        const geometry = new THREE.BoxGeometry(150, 150, 150);
+        const material = new THREE.MeshLambertMaterial({ color: "darkgray", transparent: true, opacity: 0.5 });
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(0, 75, 0);
+        scene.add(cube);
+
         // Directional light with shadow properties
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(50, 50, 50);
+        directionalLight.position.set(150, 150, 150);
         directionalLight.castShadow = true;
         scene.add(directionalLight);
 
         // Adjust shadow camera for the directional light to cover a wider area
-        directionalLight.shadow.camera.left = -100;
-        directionalLight.shadow.camera.right = 100;
-        directionalLight.shadow.camera.top = 100;
-        directionalLight.shadow.camera.bottom = -100;
+        directionalLight.shadow.camera.left = -150;
+        directionalLight.shadow.camera.right = 150;
+        directionalLight.shadow.camera.top = 150;
+        directionalLight.shadow.camera.bottom = -150;
 
         // Render the scene
         var repeatMe = function () {
