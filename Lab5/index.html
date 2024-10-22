@@ -27,10 +27,15 @@
 
                 // Create a sphere
                 this.geometry = new THREE.SphereGeometry(radius, 30, 15);
-                this.material = new THREE.MeshLambertMaterial({ color: color, wireframe: true }); // Wireframe material
+                this.material = new THREE.MeshLambertMaterial({ color: color }); // Wireframe material
                 this.sphere = new THREE.Mesh(this.geometry, this.material);
                 this.sphere.castShadow = true; // Enable casting shadows
                 this.sphere.position.set(0, y_pos, 0); // Set the sphere's position
+                // Create wireframe material
+                const wireframeMaterial = new THREE.LineBasicMaterial({ color: "white" });
+                const wireframe = new THREE.LineSegments(new THREE.WireframeGeometry(this.geometry), wireframeMaterial);
+                this.sphere.add(wireframe);
+
                 // Add the sphere and wireframe to the scene
                 scene.add(this.sphere);
 
@@ -147,6 +152,7 @@
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(150, 150, 150);
         directionalLight.castShadow = true;
+
         scene.add(directionalLight);
 
         // Adjust shadow camera for the directional light to cover a wider area
@@ -154,6 +160,10 @@
         directionalLight.shadow.camera.right = 150;
         directionalLight.shadow.camera.top = 150;
         directionalLight.shadow.camera.bottom = -150;
+
+        // Light helper
+        var helper = new THREE.CameraHelper(directionalLight.shadow.camera)
+        scene.add(helper);
 
         // Render the scene
         var repeatMe = function () {
