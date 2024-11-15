@@ -47,14 +47,16 @@
 
             svg.append("g") // append a <g> group element
                 .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")") // move x-axis to the bottom
                 .call(xAxis); // x axis call
 
             svg.append("g") // append a <g> group element
                 .attr("class", "y axis")
                 .call(yAxis); // y axis call
 
-            // Append elemets to the DOM
-            svg.append("path").attr("d", valueLine(data));
+            // Append elements to the DOM
+            svg.append("path").attr("d", valueLine(data)).attr("fill", "none")
+                .attr("stroke", "red");
         }
 
         // JSON call to api
