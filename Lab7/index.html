@@ -6,7 +6,23 @@
 <head>
     <title>D3.js Demo</title>
     <meta charset="UTF-8">
-    <style type="text/css"></style>
+    <style type="text/css">
+        /* Axis font size */
+        .axis {
+            font: 14px sans-serif;
+        }
+
+        /* Text font size */
+        .label {
+            font: 15px sans-serif;
+        }
+
+        /* Title font size */
+        .title {
+            font: 20px sans-serif;
+            text-anchor: middle;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,15 +61,34 @@
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            svg.append("g") // append a <g> group element
+            // Append the x-axis
+            svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")") // move x-axis to the bottom
-                .call(xAxis); // x axis call
+                .attr("transform", "translate(0," + height + ")") // Move x-axis to the bottom
+                .call(xAxis);
 
-            svg.append("g") // append a <g> group element
+            // Add the x-axis label
+            svg.append("text")
+                .attr("class", "label")
+                .attr("x", width / 2)
+                .attr("y", height + margin.bottom - 10) // Positioning below the x-axis
+                .style("text-anchor", "middle")
+                .text("Years Before 2023");
+
+            // Append the y-axis
+            svg.append("g")
                 .attr("class", "y axis")
-                .call(yAxis); // y axis call
+                .call(yAxis);
 
+            // Add the y-axis label
+            svg.append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)") // Rotate for vertical alignment
+                .attr("x", -height / 2) // Center along the y-axis
+                .attr("y", -margin.left + 12) // Position left of the y-axis
+                .style("text-anchor", "middle")
+                .text("CO2 (ppmv)");
+                
             // Append elements to the DOM
             svg.append("path").attr("d", valueLine(data)).attr("fill", "none")
                 .attr("stroke", "red");
