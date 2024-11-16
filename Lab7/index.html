@@ -33,14 +33,16 @@
             // Set up SVG size and margins
             var margin = { top: 50, right: 50, bottom: 50, left: 50 }, width = 980 - margin.left - margin.right, height = 670 - margin.top - margin.bottom;
 
-            // Scales
             // parse the date/time
             var x = d3.scaleLinear()
                 .domain(d3.extent(data, function (d) { return (d["years_before_2023"]); }))
                 .range([0, width]);
-
             console.log(x)
+
+            // Scales
             var y = d3.scaleLinear().domain(d3.extent(data, function (d) { return d["co2_ppmv"]; })).range([height, 0]);
+            var y2 = d3.scaleLinear().domain(d3.extent(data, function (d) { return d["ch4_ppb"]; })).range([height, 0]);
+            var y3 = d3.scaleLinear().domain(d3.extent(data, function (d) { return d["temp_anomaly"]; })).range([height, 0]);
 
             // Axes
             // x is the d3.scaleLinear()
@@ -48,10 +50,20 @@
             // y is the d3.scaleLinear()
             var yAxis = d3.axisLeft(y).ticks(3); // specify the number of ticks
 
-            // Line
+            // Line co2_ppmv
             var valueLine = d3.line() //draw line - map x, y coords for each data point ising scales
                 .x(function (d) { return x(d["years_before_2023"]) })
                 .y(function (d) { return y(d["co2_ppmv"]) });
+
+            // Line ch4_ppb
+            var valueLine2 = d3.line() //draw line - map x, y coords for each data point using scales
+                .x(function (d) { return x(d["years_before_2023"]) })
+                .y(function (d) { return y2(d["ch4_ppb"]) });
+
+            // Line temp_anomaly
+            var valueLine3 = d3.line() //draw line - map x, y coords for each data point using scales
+                .x(function (d) { return x(d["years_before_2023"]) })
+                .y(function (d) { return y3(d["temp_anomaly"]) });
 
             // Draw 
             var svg = d3.select("body")
@@ -59,7 +71,7 @@
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
             // Append the x-axis
             svg.append("g")
@@ -88,10 +100,18 @@
                 .attr("y", -margin.left + 12) // Position left of the y-axis
                 .style("text-anchor", "middle")
                 .text("CO2 (ppmv)");
-                
-            // Append elements to the DOM
+
+            // Append elements to the DOM - co2_ppmv
             svg.append("path").attr("d", valueLine(data)).attr("fill", "none")
                 .attr("stroke", "red");
+
+            // Append elements to the DOM - ch4_ppb
+            svg.append("path").attr("d", valueLine2(data)).attr("fill", "none")
+                .attr("stroke", "blue");
+
+            // Append elements to the DOM - temp_anomaly
+            svg.append("path").attr("d", valueLine3(data)).attr("fill", "none")
+                .attr("stroke", "green");
         }
 
         // JSON call to api
