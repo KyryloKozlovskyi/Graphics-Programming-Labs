@@ -154,9 +154,30 @@
                 .attr("class", "label")
                 .attr("transform", "rotate(-90)")
                 .attr("x", -height / 2)
-                .attr("y", -margin.left + 15)
+                .attr("y", -margin.left + 13)
                 .style("text-anchor", "middle")
+                .attr("stroke", "red")
                 .text("CO2 (ppmv)");
+
+            // Y-axis label (CH4)
+            svg.append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2 + 75)
+                .attr("y", -margin.left + 13)
+                .style("text-anchor", "middle")
+                .attr("stroke", "blue")
+                .text("CH4");
+
+            // Y-axis label (CO2)
+            svg.append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2 - 75)
+                .attr("y", -margin.left + 13)
+                .style("text-anchor", "middle")
+                .attr("stroke", "green")
+                .text("Temp");
 
             // Y-axis label (CH4)
             svg.append("text")
