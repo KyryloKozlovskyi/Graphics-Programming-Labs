@@ -97,7 +97,7 @@
             // Define the clipping path
             svg.append("defs").append("clipPath")
                 .attr("id", "clip")
-              .append("rect")
+                .append("rect")
                 .attr("width", width)
                 .attr("height", height);
 
@@ -141,6 +141,7 @@
                 .attr("clip-path", "url(#clip)");
 
             // Append labels
+            // X-axis label (Year)
             svg.append("text")
                 .attr("class", "label")
                 .attr("x", width / 2)
@@ -148,6 +149,7 @@
                 .style("text-anchor", "middle")
                 .text("Year");
 
+            // Y-axis label (CO2)
             svg.append("text")
                 .attr("class", "label")
                 .attr("transform", "rotate(-90)")
@@ -156,6 +158,7 @@
                 .style("text-anchor", "middle")
                 .text("CO2 (ppmv)");
 
+            // Y-axis label (CH4)
             svg.append("text")
                 .attr("class", "title")
                 .attr("x", width / 2)
@@ -170,7 +173,6 @@
                 .on("zoom", function (event) {
                     // Rescale x-axis
                     var newX = event.transform.rescaleX(x);
-
                     // Update x-axis
                     xAxisGroup.call(d3.axisBottom(newX));
 
@@ -211,5 +213,3 @@
     </script>
 
 </body>
-
-</html>
