@@ -69,8 +69,8 @@
                 .range([height, 0]);
 
             // Axes
-            var xAxis = d3.axisBottom(x).ticks(5);
-            var yAxis = d3.axisLeft(y).ticks(5);
+            var xAxis = d3.axisBottom(x).ticks(3);
+            var yAxis = d3.axisLeft(y).ticks(3);
 
             // Lines
             // Year vs CO2
@@ -94,6 +94,13 @@
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
+            // Define the clipping path
+            svg.append("defs").append("clipPath")
+                .attr("id", "clip")
+              .append("rect")
+                .attr("width", width)
+                .attr("height", height);
+
             // Append x-axis
             var xAxisGroup = svg.append("g")
                 .attr("class", "x axis")
@@ -105,14 +112,15 @@
                 .attr("class", "y axis")
                 .call(yAxis);
 
-            // Append lines
+            // Append lines with clipping path
             // CO2 vs Years line
             var path = svg.append("path")
                 .datum(data)
                 .attr("fill", "none")
                 .attr("stroke", "red")
                 .attr("stroke-width", 1.5)
-                .attr("d", valueLine);
+                .attr("d", valueLine)
+                .attr("clip-path", "url(#clip)");
 
             // CH4 vs Years line
             var path2 = svg.append("path")
@@ -120,7 +128,8 @@
                 .attr("fill", "none")
                 .attr("stroke", "blue")
                 .attr("stroke-width", 1.5)
-                .attr("d", valueLine2);
+                .attr("d", valueLine2)
+                .attr("clip-path", "url(#clip)");
 
             // Temp vs Years line
             var path3 = svg.append("path")
@@ -128,7 +137,8 @@
                 .attr("fill", "none")
                 .attr("stroke", "green")
                 .attr("stroke-width", 1.5)
-                .attr("d", valueLine3);
+                .attr("d", valueLine3)
+                .attr("clip-path", "url(#clip)");
 
             // Append labels
             svg.append("text")
@@ -156,7 +166,7 @@
             // Zoom functionality
             var zoom = d3.zoom()
                 .scaleExtent([1, 10]) // Zoom scale (1x to 10x)
-                .translateExtent([[0, 0], [width, height]]) // Limit panning
+                .translateExtent([[0, 0], [width + 100, height]]) // Limit panning
                 .on("zoom", function (event) {
                     // Rescale x-axis
                     var newX = event.transform.rescaleX(x);
