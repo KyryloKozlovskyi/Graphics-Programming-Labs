@@ -28,100 +28,178 @@
 <body>
     <h1>Kyrylo Kozlovskyi</h1>
     <script type="text/javascript">
-        // plot CO2 graph
+        // Function to plot CO2 data
         function plotCO2Data(data) {
-            // Set up SVG size and margins
-            var margin = { top: 50, right: 50, bottom: 50, left: 50 }, width = 980 - margin.left - margin.right, height = 670 - margin.top - margin.bottom;
+            // SVG size and margins setup
+            var margin = { top: 50, right: 50, bottom: 50, left: 50 },
+                width = 980 - margin.left - margin.right,
+                height = 670 - margin.top - margin.bottom;
 
-            // parse the date/time
+            // Convert "years_before_2023" to actual years
             var x = d3.scaleLinear()
-                .domain(d3.extent(data, function (d) { return (d["years_before_2023"]); }))
+                .domain(d3.extent(data, d => 2023 - d["years_before_2023"])) // Convert to calendar years
                 .range([0, width]);
-            console.log(x)
+
+            // Filter data
+            data = data
+                .filter(d => d["years_before_2023"] != null && !isNaN(d["years_before_2023"]) && d["years_before_2023"] >= 0 && d["years_before_2023"] <= 2500)
+                .slice(0, 2500);
+
+            // Log data for debugging
+            console.log(data)
+            console.log("Scale domain:", x.domain());
+            console.log("Scale range:", x.range());
 
             // Scales
-            var y = d3.scaleLinear().domain(d3.extent(data, function (d) { return d["co2_ppmv"]; })).range([height, 0]);
-            var y2 = d3.scaleLinear().domain(d3.extent(data, function (d) { return d["ch4_ppb"]; })).range([height, 0]);
-            var y3 = d3.scaleLinear().domain(d3.extent(data, function (d) { return d["temp_anomaly"]; })).range([height, 0]);
+            // Years scale
+            var x = d3.scaleLinear()
+                .domain(d3.extent(data, d => d["years_before_2023"]))
+                .range([0, width]);
+            // CO2 scale
+            var y = d3.scaleLinear()
+                .domain(d3.extent(data, d => d["co2_ppmv"]))
+                .range([height, 0]);
+            // CH4 scale
+            var y2 = d3.scaleLinear()
+                .domain(d3.extent(data, d => d["ch4_ppb"]))
+                .range([height, 0]);
+            // Temp scale
+            var y3 = d3.scaleLinear()
+                .domain(d3.extent(data, d => d["temp_anomaly"]))
+                .range([height, 0]);
 
             // Axes
-            // x is the d3.scaleLinear()
-            var xAxis = d3.axisBottom(x).ticks(3); // specify the number of ticks
-            // y is the d3.scaleLinear()
-            var yAxis = d3.axisLeft(y).ticks(3); // specify the number of ticks
+            var xAxis = d3.axisBottom(x).ticks(5);
+            var yAxis = d3.axisLeft(y).ticks(5);
 
-            // Line co2_ppmv
-            var valueLine = d3.line() //draw line - map x, y coords for each data point ising scales
-                .x(function (d) { return x(d["years_before_2023"]) })
-                .y(function (d) { return y(d["co2_ppmv"]) });
+            // Lines
+            // Year vs CO2
+            var valueLine = d3.line()
+                .x(d => x(d["years_before_2023"]))
+                .y(d => y(d["co2_ppmv"]));
+            // Year vs CH4
+            var valueLine2 = d3.line()
+                .x(d => x(d["years_before_2023"]))
+                .y(d => y2(d["ch4_ppb"]));
+            // Year vs Temp
+            var valueLine3 = d3.line()
+                .x(d => x(d["years_before_2023"]))
+                .y(d => y3(d["temp_anomaly"]));
 
-            // Line ch4_ppb
-            var valueLine2 = d3.line() //draw line - map x, y coords for each data point using scales
-                .x(function (d) { return x(d["years_before_2023"]) })
-                .y(function (d) { return y2(d["ch4_ppb"]) });
-
-            // Line temp_anomaly
-            var valueLine3 = d3.line() //draw line - map x, y coords for each data point using scales
-                .x(function (d) { return x(d["years_before_2023"]) })
-                .y(function (d) { return y3(d["temp_anomaly"]) });
-
-            // Draw 
+            // Create SVG container
             var svg = d3.select("body")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
 
-            // Append the x-axis
-            svg.append("g")
+            // Append x-axis
+            var xAxisGroup = svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")") // Move x-axis to the bottom
+                .attr("transform", `translate(0,${height})`)
                 .call(xAxis);
 
-            // Add the x-axis label
-            svg.append("text")
-                .attr("class", "label")
-                .attr("x", width / 2)
-                .attr("y", height + margin.bottom - 10) // Positioning below the x-axis
-                .style("text-anchor", "middle")
-                .text("Years Before 2023");
-
-            // Append the y-axis
+            // Append y-axis
             svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis);
 
-            // Add the y-axis label
+            // Append lines
+            // CO2 vs Years line
+            var path = svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "red")
+                .attr("stroke-width", 1.5)
+                .attr("d", valueLine);
+
+            // CH4 vs Years line
+            var path2 = svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "blue")
+                .attr("stroke-width", 1.5)
+                .attr("d", valueLine2);
+
+            // Temp vs Years line
+            var path3 = svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "green")
+                .attr("stroke-width", 1.5)
+                .attr("d", valueLine3);
+
+            // Append labels
             svg.append("text")
                 .attr("class", "label")
-                .attr("transform", "rotate(-90)") // Rotate for vertical alignment
-                .attr("x", -height / 2) // Center along the y-axis
-                .attr("y", -margin.left + 12) // Position left of the y-axis
+                .attr("x", width / 2)
+                .attr("y", height + margin.bottom - 10)
+                .style("text-anchor", "middle")
+                .text("Year");
+
+            svg.append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2)
+                .attr("y", -margin.left + 15)
                 .style("text-anchor", "middle")
                 .text("CO2 (ppmv)");
 
-            // Append elements to the DOM - co2_ppmv
-            svg.append("path").attr("d", valueLine(data)).attr("fill", "none")
-                .attr("stroke", "red");
+            svg.append("text")
+                .attr("class", "title")
+                .attr("x", width / 2)
+                .attr("y", -margin.top / 2)
+                .style("text-anchor", "middle")
+                .text("CO2, CH4, and Temperature Anomalies Over Time");
 
-            // Append elements to the DOM - ch4_ppb
-            svg.append("path").attr("d", valueLine2(data)).attr("fill", "none")
-                .attr("stroke", "blue");
+            // Zoom functionality
+            var zoom = d3.zoom()
+                .scaleExtent([1, 10]) // Zoom scale (1x to 10x)
+                .translateExtent([[0, 0], [width, height]]) // Limit panning
+                .on("zoom", function (event) {
+                    // Rescale x-axis
+                    var newX = event.transform.rescaleX(x);
 
-            // Append elements to the DOM - temp_anomaly
-            svg.append("path").attr("d", valueLine3(data)).attr("fill", "none")
-                .attr("stroke", "green");
+                    // Update x-axis
+                    xAxisGroup.call(d3.axisBottom(newX));
+
+                    // Update lines with new x-scale
+                    path.attr("d", d3.line()
+                        .x(d => newX(d["years_before_2023"]))
+                        .y(d => y(d["co2_ppmv"]))
+                    );
+
+                    path2.attr("d", d3.line()
+                        .x(d => newX(d["years_before_2023"]))
+                        .y(d => y2(d["ch4_ppb"]))
+                    );
+
+                    path3.attr("d", d3.line()
+                        .x(d => newX(d["years_before_2023"]))
+                        .y(d => y3(d["temp_anomaly"]))
+                    );
+                });
+
+            // Add zoom area
+            svg.append("rect")
+                .attr("width", width)
+                .attr("height", height)
+                .style("fill", "none")
+                .style("pointer-events", "all")
+                .call(zoom);
         }
 
         // JSON call to api
         $.getJSON("https://tinyurl.com/k4chnujx", function (data) {
-            // print to console
+            // Logs JSON data
+            data = data.slice(0, 2500)
             console.log(data);
-            //call function
+            // Function call to plot data
             plotCO2Data(data);
         });
     </script>
+
 </body>
 
 </html>
