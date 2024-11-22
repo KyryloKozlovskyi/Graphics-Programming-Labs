@@ -25,6 +25,13 @@ sobelHorizontal = cv2.Sobel(imgOut, cv2.CV_64F, 1, 0, ksize=5)  # x dir
 sobelVertical = cv2.Sobel(imgOut, cv2.CV_64F, 0, 1, ksize=5)  # y dir
 sobelXY = sobelHorizontal + sobelVertical
 
+# Specify threshholds
+cannyThreshold = 100
+cannyParam2 = 200
+
+# Canny edge detection
+canny = cv2.Canny(mg, cannyThreshold, cannyParam2)
+
 # Specify number of rows and columns
 nrows = 3
 ncols = 3
@@ -51,4 +58,7 @@ plt.title('Sobel Y'), plt.xticks([]), plt.yticks([])
 # Sobel (XY)
 plt.subplot(nrows, ncols, 7), plt.imshow(sobelVertical, cmap='gray')
 plt.title('Sobel XY'), plt.xticks([]), plt.yticks([])
+# Canny
+plt.subplot(nrows, ncols, 8), plt.imshow(canny, cmap='gray')
+plt.title('Canny'), plt.xticks([]), plt.yticks([])
 plt.show()
