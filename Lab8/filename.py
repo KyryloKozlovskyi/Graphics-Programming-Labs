@@ -23,9 +23,10 @@ imgOut2 = cv2.GaussianBlur(
 # Sobel edge detection
 sobelHorizontal = cv2.Sobel(imgOut, cv2.CV_64F, 1, 0, ksize=5)  # x dir
 sobelVertical = cv2.Sobel(imgOut, cv2.CV_64F, 0, 1, ksize=5)  # y dir
+sobelXY = sobelHorizontal + sobelVertical
 
 # Specify number of rows and columns
-nrows = 2
+nrows = 3
 ncols = 3
 
 # Plot gray colour, 3x3, 13x13 blur images
@@ -47,4 +48,7 @@ plt.title('Sobel X'), plt.xticks([]), plt.yticks([])
 # Sobel (Y) Vertical
 plt.subplot(nrows, ncols, 6), plt.imshow(sobelVertical, cmap='gray')
 plt.title('Sobel Y'), plt.xticks([]), plt.yticks([])
+# Sobel (XY)
+plt.subplot(nrows, ncols, 7), plt.imshow(sobelVertical, cmap='gray')
+plt.title('Sobel XY'), plt.xticks([]), plt.yticks([])
 plt.show()
