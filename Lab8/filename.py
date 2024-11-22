@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # Load the image
-mg = cv2.imread('ATU.jpg',)
+mg = cv2.imread('IMG.jpg',)
 mg = cv2.cvtColor(mg, cv2.COLOR_BGR2RGB)  # Fix colour issues
 
 # cvtColor() function to grayscale the image
