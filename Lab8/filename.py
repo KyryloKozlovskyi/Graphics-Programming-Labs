@@ -28,6 +28,7 @@ sobelXY = sobelHorizontal + sobelVertical
 # Sobel with threshold
 sobelThreshold = 1000
 print(type(sobelXY))
+# For each pixel, if the value is greater than the threshold, set it to 1
 for i in range(sobelXY.shape[0]):
     for j in range(sobelXY.shape[1]):
         if sobelXY[i][j] > sobelThreshold:
