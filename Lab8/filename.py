@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # Load the image
-mg = cv2.imread('IMG.jpg',)
+mg = cv2.imread('ATU.jpg',)
 mg = cv2.cvtColor(mg, cv2.COLOR_BGR2RGB)  # Fix colour issues
 
 # cvtColor() function to grayscale the image
@@ -24,6 +24,17 @@ imgOut2 = cv2.GaussianBlur(
 sobelHorizontal = cv2.Sobel(imgOut, cv2.CV_64F, 1, 0, ksize=5)  # x dir
 sobelVertical = cv2.Sobel(imgOut, cv2.CV_64F, 0, 1, ksize=5)  # y dir
 sobelXY = sobelHorizontal + sobelVertical
+
+# Sobel with threshold
+sobelThreshold = 1000
+print(type(sobelXY))
+for i in range(sobelXY.shape[0]):
+    for j in range(sobelXY.shape[1]):
+        if sobelXY[i][j] > sobelThreshold:
+            sobelXY[i][j] = 1
+        else:
+            sobelXY[i][j] = 0
+
 
 # Specify threshholds
 cannyThreshold = 100
@@ -61,4 +72,7 @@ plt.title('Sobel XY'), plt.xticks([]), plt.yticks([])
 # Canny
 plt.subplot(nrows, ncols, 8), plt.imshow(canny, cmap='gray')
 plt.title('Canny'), plt.xticks([]), plt.yticks([])
+# Sobel Threshold
+plt.subplot(nrows, ncols, 9), plt.imshow(sobelXY, cmap='gray')
+plt.title('Sobel Threshold'), plt.xticks([]), plt.yticks([])
 plt.show()
