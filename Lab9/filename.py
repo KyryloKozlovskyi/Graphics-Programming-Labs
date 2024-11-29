@@ -10,7 +10,7 @@ mg = cv2.cvtColor(mg, cv2.COLOR_BGR2RGB)  # Fix colour issues
 gray_image = cv2.cvtColor(mg, cv2.COLOR_BGR2GRAY)
 
 # Harris corner detection
-imgHarris = gray_image.copy()
+imgHarris = gray_image.copy()  # Copy grayscale image
 block_size = 2
 aperture_size = 3
 k = 0.04
