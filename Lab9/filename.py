@@ -10,17 +10,28 @@ mg = cv2.cvtColor(mg, cv2.COLOR_BGR2RGB)  # Fix colour issues
 gray_image = cv2.cvtColor(mg, cv2.COLOR_BGR2GRAY)
 
 # Harris corner detection
-imgHarris = mg.copy()  # Copy grayscale image
+imgHarris = mg.copy()  # Copy of the original image
 block_size = 2
 aperture_size = 3
 k = 0.04
+# Grayscale image used as input
 dst = cv2.cornerHarris(gray_image, block_size, aperture_size, k)
-
-threshold = 0.25  # number between 0 and 1
+# Loops through every element in the 2d matrix
+threshold = 0.1  # number between 0 and 1
 for i in range(len(dst)):
     for j in range(len(dst[i])):
         if dst[i][j] > (threshold*dst.max()):
-            cv2.circle(imgHarris, (j, i), 3, (0, 75, 75), -1)
+            cv2.circle(imgHarris, (j, i), 3, (255, 170, 29), -1)
+
+# Shi Tomasi
+maxCorners = 4
+qualityLevel = 0.01
+minDistance = 10
+# Detect corners
+corners = cv2.goodFeaturesToTrack(
+    gray_image, maxCorners, qualityLevel, minDistance)
+corners = np.int8(corners)  # convert corners values to integer
+imgShiTomasi = mg.copy()  # Copy of the original image
 
 # Specify number of rows and columns
 nrows = 3
@@ -35,4 +46,5 @@ plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
 # Harris
 plt.subplot(nrows, ncols, 3), plt.imshow(imgHarris, cmap='gray')
 plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
+# Show plotted imgages
 plt.show()
