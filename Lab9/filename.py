@@ -24,14 +24,19 @@ for i in range(len(dst)):
             cv2.circle(imgHarris, (j, i), 3, (255, 170, 29), -1)
 
 # Shi Tomasi
-maxCorners = 4
+maxCorners = 100
 qualityLevel = 0.01
 minDistance = 10
 # Detect corners
 corners = cv2.goodFeaturesToTrack(
     gray_image, maxCorners, qualityLevel, minDistance)
-corners = np.int8(corners)  # convert corners values to integer
+corners = np.int0(corners)  # convert corners values to integer
 imgShiTomasi = mg.copy()  # Copy of the original image
+# Plot GFTT
+for i in corners:
+    x, y = i.ravel()
+    cv2.circle(imgShiTomasi, (x, y), 3, (170, 255, 29), -1)
+
 
 # Specify number of rows and columns
 nrows = 3
@@ -46,5 +51,8 @@ plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
 # Harris
 plt.subplot(nrows, ncols, 3), plt.imshow(imgHarris, cmap='gray')
 plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
+# GFTT
+plt.subplot(nrows, ncols, 4), plt.imshow(imgShiTomasi, cmap='gray')
+plt.title('GFTT'), plt.xticks([]), plt.yticks([])
 # Show plotted imgages
 plt.show()
