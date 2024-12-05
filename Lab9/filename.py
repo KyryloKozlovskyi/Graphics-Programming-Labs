@@ -9,6 +9,18 @@ mg = cv2.cvtColor(mg, cv2.COLOR_BGR2RGB)  # Fix colour issues
 # cvtColor() function to grayscale the image
 gray_image = cv2.cvtColor(mg, cv2.COLOR_BGR2GRAY)
 
+# Initiate ORB detector
+orb = cv2.ORB_create()
+
+# find the keypoints with ORB
+kp = orb.detect(gray_image,None)
+ 
+# compute the descriptors with ORB
+kp, des = orb.compute(gray_image, kp)
+
+img2 = cv2.drawKeypoints(gray_image, kp, None, color=(0,255,0), flags=0)
+
+
 # Harris corner detection
 imgHarris = mg.copy()  # Copy of the original image
 block_size = 2
@@ -50,9 +62,13 @@ plt.subplot(nrows, ncols, 2), plt.imshow(gray_image, cmap='gray')
 plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
 # Harris
 plt.subplot(nrows, ncols, 3), plt.imshow(imgHarris, cmap='gray')
-plt.title('GrayScale'), plt.xticks([]), plt.yticks([])
+plt.title('Harris'), plt.xticks([]), plt.yticks([])
 # GFTT
 plt.subplot(nrows, ncols, 4), plt.imshow(imgShiTomasi, cmap='gray')
 plt.title('GFTT'), plt.xticks([]), plt.yticks([])
+# ORB
+# GFTT
+plt.subplot(nrows, ncols, 5), plt.imshow(img2, cmap='gray')
+plt.title('ORB'), plt.xticks([]), plt.yticks([])
 # Show plotted imgages
 plt.show()
