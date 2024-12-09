@@ -14,6 +14,16 @@ model = YOLO("yolo11n.pt")
 video_path = "vid.mp4"
 cap = cv2.VideoCapture(video_path)
 
+# Get the video frame width, height, and frames per second (fps)
+frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fps = int(cap.get(cv2.CAP_PROP_FPS))
+
+# Define the codec and create a VideoWriter object to save the output video
+output_path = "output_vid.mp4"
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+out = cv2.VideoWriter(output_path, fourcc, fps, (frame_width, frame_height))
+
 # Initialize a counter for tracked detections
 tracked_detections = Counter()
 
@@ -40,9 +50,9 @@ while cap.isOpened():
             if class_id in previous_bboxes:
                 prev_bbox = previous_bboxes[class_id]
                 if bbox[1] < prev_bbox[1]:  # Compare y1 coordinates
-                    direction += ", Up"
+                    direction += "Up"
                 else:
-                    direction += ", Down"
+                    direction += "Down"
                 print(f"#{class_id} is moving {direction}")
             previous_bboxes[class_id] = bbox
 
@@ -51,6 +61,9 @@ while cap.isOpened():
 
         # Visualize the results on the frame
         annotated_frame = results[0].plot()
+
+        # Write the annotated frame to the output video
+        out.write(annotated_frame)
 
         # Display the annotated frame
         cv2.namedWindow("YOLOv11 Tracking", cv2.WINDOW_KEEPRATIO)
@@ -64,8 +77,9 @@ while cap.isOpened():
         # Break the loop if the end of the video is reached
         break
 
-# Release the video capture object and close the display window
+# Release the video capture and writer objects and close the display window
 cap.release()
+out.release()
 cv2.destroyAllWindows()
 
 # Print the number of different tracked detections of each class
