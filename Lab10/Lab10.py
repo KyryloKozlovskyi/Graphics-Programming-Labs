@@ -1,6 +1,6 @@
 import cv2
 import os
-from collections import Counter
+from collections import Counter, defaultdict
 
 from ultralytics import YOLO
 
@@ -17,6 +17,9 @@ cap = cv2.VideoCapture(video_path)
 # Initialize a counter for tracked detections
 tracked_detections = Counter()
 
+# Initialize a dictionary to store previous bounding boxes
+previous_bboxes = defaultdict(list)
+
 # Loop through the video frames
 while cap.isOpened():
     # Read a frame from the video
@@ -26,9 +29,25 @@ while cap.isOpened():
         # Run YOLO11 tracking on the frame, persisting tracks between frames
         results = model.track(frame, persist=True, classes=[2])
 
-        # Extract class IDs of tracked detections
+        # Extract class IDs and bounding boxes of tracked detections
         class_ids = results[0].boxes.cls.tolist()
+        bboxes = results[0].boxes.xyxy.tolist()  # Bounding boxes in [x1, y1, x2, y2] format
         tracked_detections.update(class_ids)
+
+        # Determine the movement direction of each object
+        for class_id, bbox in zip(class_ids, bboxes):
+            direction = ""
+            if class_id in previous_bboxes:
+                prev_bbox = previous_bboxes[class_id]
+                if bbox[1] < prev_bbox[1]:  # Compare y1 coordinates
+                    direction += ", Up"
+                else:
+                    direction += ", Down"
+                print(f"#{class_id} is moving {direction}")
+            previous_bboxes[class_id] = bbox
+
+            # Display the direction on the frame
+            cv2.putText(frame, direction, (int(bbox[0]), int(bbox[1]) - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         # Visualize the results on the frame
         annotated_frame = results[0].plot()
